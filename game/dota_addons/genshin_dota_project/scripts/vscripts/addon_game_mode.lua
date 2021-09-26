@@ -1,7 +1,7 @@
--- Generated from template
+require("game_setup")
 
-if CAddonTemplateGameMode == nil then
-	CAddonTemplateGameMode = class({})
+if GenshinDota == nil then
+	GenshinDota = class({})
 end
 
 function Precache( context )
@@ -16,17 +16,18 @@ end
 
 -- Create the game mode when we activate
 function Activate()
-	GameRules.AddonTemplate = CAddonTemplateGameMode()
+	GameRules.AddonTemplate = GenshinDota()
 	GameRules.AddonTemplate:InitGameMode()
 end
 
-function CAddonTemplateGameMode:InitGameMode()
+function GenshinDota:InitGameMode()
 	print( "Template addon is loaded." )
 	GameRules:GetGameModeEntity():SetThink( "OnThink", self, "GlobalThink", 2 )
+	GameSetup:init()
 end
 
 -- Evaluate the state of the game
-function CAddonTemplateGameMode:OnThink()
+function GenshinDota:OnThink()
 	if GameRules:State_Get() == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
 		--print( "Template addon script is running." )
 	elseif GameRules:State_Get() >= DOTA_GAMERULES_STATE_POST_GAME then
