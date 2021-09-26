@@ -11,7 +11,9 @@ end
 require('util')
 require('libraries/timers')                      -- Core lua library
 require('libraries/player_resource')             -- Core lua library
-require('gamemode')                              -- Core barebones file
+require('gamemode')  
+require('test')                            -- Core barebones file
+require('genshin_elements')
 
 function Precache(context)
 --[[
@@ -59,5 +61,16 @@ end
 function Activate()
 	DebugPrint("[BAREBONES] Activating ...")
 	print("Your custom game is activating.")
+	GameRules:GetGameModeEntity():SetThink( "OnThink", barebones, "GlobalThink", 2 )
 	barebones:InitGameMode()
+	Test:Start()
+end
+
+function barebones:OnThink()
+	if GameRules:State_Get() == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
+		
+	elseif GameRules:State_Get() >= DOTA_GAMERULES_STATE_POST_GAME then
+		return nil
+	end
+	return 1
 end

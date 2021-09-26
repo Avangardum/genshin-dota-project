@@ -3,6 +3,8 @@
 #base "abilities/dummy_unit_ability.txt"
 #base "abilities/chaos_knight_reality_rift.txt"
 #base "abilities/detonator_conjure_image.txt"
+#base "abilities/element_test_unit_elemental_damage.txt"
+#base "abilities/element_test_unit_pyro_damage.txt"
 
 "DOTAAbilities"
 {
