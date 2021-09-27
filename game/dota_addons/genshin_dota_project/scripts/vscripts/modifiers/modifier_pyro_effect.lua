@@ -1,3 +1,14 @@
-require("modifiers/modifier_elemental_effect")
+modifier_pyro_effect = class({})
 
-modifier_pyro_effect = class({}, nil, modifier_elemental_effect)
+function modifier_pyro_effect:IsHidden()
+    return false
+  end
+  
+  function modifier_pyro_effect:IsDebuff() 
+    return true
+  end
+  
+  function modifier_pyro_effect:IsPurgable() 
+    return true
+  end
+  

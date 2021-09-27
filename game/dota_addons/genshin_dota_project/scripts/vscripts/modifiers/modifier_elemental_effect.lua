@@ -1,1 +1,0 @@
-modifier_elemental_effect = class({})
