@@ -1,6 +1,7 @@
-element_test_unit_elemental_damage = class({})
+-- This is not an ability. This is a container for base functions for elemental damage abilities
+ElementTestUnitElementalDamageBaseFunctions = {}
 
-function element_test_unit_elemental_damage:OnSpellStart(element)
+function ElementTestUnitElementalDamageBaseFunctions:OnSpellStart(element)
     local target = self:GetCursorTarget()
     local caster = self:GetCaster()
 

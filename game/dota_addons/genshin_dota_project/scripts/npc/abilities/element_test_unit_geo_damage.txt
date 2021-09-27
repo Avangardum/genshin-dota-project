@@ -1,12 +1,12 @@
 "DOTAAbilities"
 {
-    "element_test_unit_pyro_damage"
+    "element_test_unit_geo_damage"
     {
         // General
 		//-------------------------------------------------------------------------------------------------------------
 		"BaseClass"						"ability_lua"
-		"ScriptFile"					"abilities/element_test_unit_pyro_damage.lua"
-		"AbilityTextureName"			"pyro"
+		"ScriptFile"					"abilities/element_test_unit_geo_damage.lua"
+		"AbilityTextureName"			"geo"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
 		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_ENEMY"
 		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_HERO | DOTA_UNIT_TARGET_BASIC"
