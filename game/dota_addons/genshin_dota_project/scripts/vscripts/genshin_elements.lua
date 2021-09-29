@@ -15,9 +15,8 @@ GenshinElements.CRYO = 3
 GenshinElements.ELECTRO = 4
 GenshinElements.ANEMO = 5
 GenshinElements.GEO = 6
-GenshinElements.DENDRO = 7
 GenshinElements.MIN_ELEMENT = 1
-GenshinElements.MAX_ELEMENT = 7
+GenshinElements.MAX_ELEMENT = 6
 
 GenshinElements.DEFAULT_ELEMENT_DURATIONS =
 {
@@ -39,11 +38,23 @@ GenshinElements.ELEMENTAL_MODIFIER_NAMES =
     [GenshinElements.GEO] = "modifier_geo_effect"
 }
 
+GenshinElements.ELEMENT_NAMES =
+{
+    [GenshinElements.PYRO] = "pyro",
+    [GenshinElements.HYDRO] = "hydro",
+    [GenshinElements.CRYO] = "cryo",
+    [GenshinElements.ELECTRO] = "electro",
+    [GenshinElements.ANEMO] = "anemo",
+    [GenshinElements.GEO] = "geo"
+}
+
+GenshinElements.VAPORIZE_PYRO_DAMAGE_MULTIPLIER = 1.5
+GenshinElements.VAPORIZE_HYDRO_DAMAGE_MULTIPLIER = 2
+
 function GenshinElements:ApplyElementalDamage(damageTable)
     if damageTable.element == nil then
         error("damageTable.element is nil")
     end
-    print("Applying " .. damageTable.damage .. " damage of element " .. damageTable.element)
     local applyElementTable = 
     {
         caster = damageTable.attacker,
@@ -64,10 +75,14 @@ function GenshinElements:ApplyElement(args)
     args.duration = args.duration or self.DEFAULT_ELEMENT_DURATION
     args.target:AddNewModifier( args.caster, nil, self.ELEMENTAL_MODIFIER_NAMES[args.element], { duration = self.DEFAULT_ELEMENT_DURATIONS[args.element] } )
 
+    -- elemental reactions
     local damageMuliplier = 1
-    if(self:UnitHasElementalModifiers(target, self.PYRO, self.HYDRO)) then
-        print("Vaporize triggered by element " .. args.element)
-        self:RemoveElementalModifiersFromUnit(target, self.PYRO, self.HYDRO)
+    -- vaporize
+    if(self:UnitHasElementalModifiers(args.target, {self.PYRO, self.HYDRO})) then
+        if args.element == self.PYRO then damageMuliplier = self.VAPORIZE_PYRO_DAMAGE_MULTIPLIER
+        elseif args.element == self.HYDRO then damageMuliplier = self.VAPORIZE_HYDRO_DAMAGE_MULTIPLIER
+        else error("vaporize trigerred by the " .. self.ELEMENT_NAMES[args.element] .. " element") end
+        self:RemoveElementalModifiersFromUnit(args.target, {self.PYRO, self.HYDRO})
     end
 
     return damageMuliplier
@@ -77,8 +92,8 @@ function GenshinElements:UnitHasElementalModifier(unit, element)
     return unit:FindModifierByName(self.ELEMENTAL_MODIFIER_NAMES[element]) ~= nil
 end
 
-function GenshinElements:UnitHasElementalModifiers(unit, ...)
-    for k, v in pairs{...} do
+function GenshinElements:UnitHasElementalModifiers(unit, elements)
+    for k, v in pairs(elements) do
         if not self:UnitHasElementalModifier(unit, v) then
             return false
         end
@@ -91,8 +106,8 @@ function GenshinElements:RemoveElementalModifierFromUnit(unit, element)
     unit:RemoveModifierByName(self.ELEMENTAL_MODIFIER_NAMES[element])
 end
 
-function GenshinElements:RemoveElementalModifiersFromUnit(unit, ...)
-    for k, v in pairs{...} do
-        self:RemoveElementalModifierFromUnit(v)
+function GenshinElements:RemoveElementalModifiersFromUnit(unit, elements)
+    for k, v in pairs(elements) do
+        self:RemoveElementalModifierFromUnit(unit, v)
     end
 end
