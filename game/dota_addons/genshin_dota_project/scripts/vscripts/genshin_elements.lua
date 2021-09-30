@@ -50,6 +50,8 @@ GenshinElements.ELEMENT_NAMES =
 
 GenshinElements.VAPORIZE_PYRO_DAMAGE_MULTIPLIER = 1.5
 GenshinElements.VAPORIZE_HYDRO_DAMAGE_MULTIPLIER = 2
+GenshinElements.MELT_PYRO_DAMAGE_MULTIPLIER = 2
+GenshinElements.MELT_CRYO_DAMAGE_MULTIPLIER = 1.5
 
 function GenshinElements:ApplyElementalDamage(damageTable)
     if damageTable.element == nil then
@@ -77,12 +79,21 @@ function GenshinElements:ApplyElement(args)
 
     -- elemental reactions
     local damageMuliplier = 1
+
     -- vaporize
     if(self:UnitHasElementalModifiers(args.target, {self.PYRO, self.HYDRO})) then
         if args.element == self.PYRO then damageMuliplier = self.VAPORIZE_PYRO_DAMAGE_MULTIPLIER
         elseif args.element == self.HYDRO then damageMuliplier = self.VAPORIZE_HYDRO_DAMAGE_MULTIPLIER
         else error("vaporize trigerred by the " .. self.ELEMENT_NAMES[args.element] .. " element") end
         self:RemoveElementalModifiersFromUnit(args.target, {self.PYRO, self.HYDRO})
+    end
+
+    -- melt
+    if(self:UnitHasElementalModifiers(args.target, {self.PYRO, self.CRYO})) then
+        if args.element == self.PYRO then damageMuliplier = self.MELT_PYRO_DAMAGE_MULTIPLIER
+        elseif args.element == self.CRYO then damageMuliplier = self.MELT_CRYO_DAMAGE_MULTIPLIER
+        else error("melt trigerred by the " .. self.ELEMENT_NAMES[args.element] .. " element") end
+        self:RemoveElementalModifiersFromUnit(args.target, {self.PYRO, self.CRYO})
     end
 
     return damageMuliplier
