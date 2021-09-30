@@ -52,6 +52,7 @@ GenshinElements.VAPORIZE_PYRO_DAMAGE_MULTIPLIER = 1.5
 GenshinElements.VAPORIZE_HYDRO_DAMAGE_MULTIPLIER = 2
 GenshinElements.MELT_PYRO_DAMAGE_MULTIPLIER = 2
 GenshinElements.MELT_CRYO_DAMAGE_MULTIPLIER = 1.5
+GenshinElements.OVERLOAD_DAMAGE_FUNCTION = function(x) return 0.3 * x * x + 34 end
 
 function GenshinElements:ApplyElementalDamage(damageTable)
     if damageTable.element == nil then
