@@ -1,2 +1,3 @@
 -createhero npc_gdp_element_test_unit
 -createhero axe enemy
+-levelbots 30
