@@ -66,8 +66,8 @@
 		},
 		{
 			_class = "C_INIT_RandomLifeTime"
-			m_fLifetimeMin = 0.97
-			m_fLifetimeMax = 0.97
+			m_fLifetimeMin = 0.25
+			m_fLifetimeMax = 0.25
 		},
 	]
 	m_Operators = 
