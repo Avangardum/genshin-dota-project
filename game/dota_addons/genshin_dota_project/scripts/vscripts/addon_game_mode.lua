@@ -61,16 +61,29 @@ end
 function Activate()
 	DebugPrint("[BAREBONES] Activating ...")
 	print("Your custom game is activating.")
-	GameRules:GetGameModeEntity():SetThink( "OnThink", barebones, "GlobalThink", 2 )
+	GameRules:GetGameModeEntity():SetThink("WaterWetThinker", barebones, "GlobalThink", 2)
 	barebones:InitGameMode()
 	Test:Start()
 end
 
-function barebones:OnThink()
-	if GameRules:State_Get() == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
-		
-	elseif GameRules:State_Get() >= DOTA_GAMERULES_STATE_POST_GAME then
-		return nil
+function barebones:WaterWetThinker()
+	local units = FindUnitsInRadius(
+		DOTA_TEAM_GOODGUYS, 
+		Vector(0, 0, 0), 
+		nil, 
+		FIND_UNITS_EVERYWHERE, 
+		DOTA_UNIT_TARGET_TEAM_BOTH,
+		DOTA_UNIT_TARGET_ALL,
+		DOTA_UNIT_TARGET_FLAG_NONE,
+		FIND_ANY_ORDER,
+		false
+    )
+
+	for _, unit in pairs(units) do
+		if unit:GetOrigin().z == 0 then
+			GenshinElements:ApplyElement{caster = unit, target = unit, element = GenshinElements.HYDRO}
+		end
 	end
-	return 1
+
+	return 0.1
 end

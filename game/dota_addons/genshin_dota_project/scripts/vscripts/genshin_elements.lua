@@ -54,6 +54,8 @@ GenshinElements.MELT_PYRO_DAMAGE_MULTIPLIER = 2
 GenshinElements.MELT_CRYO_DAMAGE_MULTIPLIER = 1.5
 GenshinElements.OVERLOAD_DAMAGE_FUNCTION = function(x) return 0.3 * x * x + 34 end
 
+
+-- Requires a damage table with all parameters required for ApplyDamage, plus it shoud contain an element
 function GenshinElements:ApplyElementalDamage(damageTable)
     if damageTable.element == nil then
         error("damageTable.element is nil")
@@ -69,14 +71,14 @@ function GenshinElements:ApplyElementalDamage(damageTable)
     ApplyDamage(damageTable)
 end
 
--- returns damage multiplier if melt or vaporize reaction was trigerred, otherwise returns 1
+-- Requires a table with following arguments: target, element, caster (optional)
+-- Returns damage multiplier if melt or vaporize reaction was trigerred, otherwise returns 1
 function GenshinElements:ApplyElement(args)
-    if args.caster == nil then error("caster is nil") end
     if args.target == nil then error("target is nil") end
     if args.element == nil then error("element is nil") end
 
-    args.duration = args.duration or self.DEFAULT_ELEMENT_DURATION
-    args.target:AddNewModifier( args.caster, nil, self.ELEMENTAL_MODIFIER_NAMES[args.element], { duration = self.DEFAULT_ELEMENT_DURATIONS[args.element] } )
+    args.duration = args.duration or self.DEFAULT_ELEMENT_DURATIONS[args.element]
+    args.target:AddNewModifier( args.caster, nil, self.ELEMENTAL_MODIFIER_NAMES[args.element], { duration = args.duration } )
 
     -- elemental reactions
     local damageMuliplier = 1
