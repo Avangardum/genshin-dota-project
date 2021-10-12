@@ -1,5 +1,17 @@
 modifier_electro_effect = class({})
 
+function modifier_electro_effect:IsDebuff()
+	return true;
+end
+
+function modifier_electro_effect:IsHidden()
+	return false;
+end
+
+function modifier_electro_effect:IsPurgable()
+	return true;
+end
+
 function modifier_electro_effect:GetTexture()
     return "electro"
 end
