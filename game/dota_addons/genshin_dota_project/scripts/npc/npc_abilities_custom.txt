@@ -9,6 +9,7 @@
 #base "abilities/element_test_unit_electro_damage.txt"
 #base "abilities/element_test_unit_anemo_damage.txt"
 #base "abilities/element_test_unit_geo_damage.txt"
+#base "abilities/yanfei_scarlet_seals.txt"
 
 "DOTAAbilities"
 {
