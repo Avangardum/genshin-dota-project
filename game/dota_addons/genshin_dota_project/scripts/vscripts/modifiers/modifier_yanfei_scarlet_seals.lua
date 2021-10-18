@@ -57,3 +57,7 @@ function modifier_yanfei_scarlet_seals:RemoveStacks()
 	self:SetStackCount(0)
 	return stacksRemoved
 end
+
+function modifier_yanfei_scarlet_seals:SetMaxStacks()
+	self:SetStackCount(self:GetAbility():GetSpecialValueFor("max_stacks"))
+end

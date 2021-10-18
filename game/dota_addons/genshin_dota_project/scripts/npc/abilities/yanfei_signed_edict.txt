@@ -1,0 +1,31 @@
+"DOTAAbilities"
+{
+    "yanfei_signed_edict"
+    {
+        "BaseClass"					    "ability_lua"
+        "ScriptFile"					"abilities/yanfei_signed_edict.lua"
+        
+        "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"	
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+        "AbilityCastPoint"				"0.45 0.45 0.45 0.45"
+        "AbilityCastRange"				"625"
+        "AbilityCooldown"				"7.0 7.0 7.0 7.0"
+        "AbilityManaCost"				"100 110 120 130"
+		"AbilityTextureName"			"jakiro_liquid_fire"
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"              "FIELD_INTEGER"
+                "aoe"                   "300"
+            }
+            "02"
+            {
+                "var_type"              "FIELD_INTEGER"
+                "damage"                "110 180 250 320"
+            }
+        }
+    }
+}
