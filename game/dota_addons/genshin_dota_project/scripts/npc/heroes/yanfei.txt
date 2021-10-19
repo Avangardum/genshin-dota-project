@@ -4,8 +4,8 @@
     {
         "override_hero"                "npc_dota_hero_lina"
 
-        "Ability1"		               "yanfei_signed_edict"
-        "Ability2"		               ""
+        "Ability1"		               "yanfei_seal_of_approval"
+        "Ability2"		               "yanfei_signed_edict"
         "Ability3"		               "yanfei_scarlet_seals"
         "Ability4"		               ""
         "Ability5"		               ""

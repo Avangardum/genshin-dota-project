@@ -1,0 +1,41 @@
+"DOTAAbilities"
+{
+    "yanfei_seal_of_approval"
+    {
+        "BaseClass"					    "ability_lua"
+        "ScriptFile"					"abilities/yanfei_seal_of_approval.lua"
+        
+        "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"	
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+        "AbilityCastPoint"				"0.45 0.45 0.45 0.45"
+        "AbilityCastRange"				"625"
+        "AbilityCooldown"				"7.0 7.0 7.0 7.0"
+        "AbilityManaCost"				"100 110 120 130"
+		"AbilityTextureName"			"lina_light_strike_array"
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"              "FIELD_INTEGER"
+                "base_aoe"              "200"
+            }
+            "02"
+            {
+                "var_type"              "FIELD_INTEGER"
+                "aoe_per_seal"          "50"
+            }
+            "03"
+            {
+                "var_type"              "FIELD_INTEGER"
+                "base_damage"           "80 120 160 200"
+            }
+            "04"
+            {
+                "var_type"              "FIELD_INTEGER"
+                "damage_per_seal"       "20 30 40 50"
+            }
+        }
+    }
+}

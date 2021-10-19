@@ -51,7 +51,7 @@ function modifier_yanfei_scarlet_seals:AddStack()
 	self:IncrementStackCount()
 end
 
--- Removes all stack and returns how many stacks were removed
+-- Removes all stacks and returns how many stacks were removed
 function modifier_yanfei_scarlet_seals:RemoveStacks()
 	local stacksRemoved = self:GetStackCount()
 	self:SetStackCount(0)
