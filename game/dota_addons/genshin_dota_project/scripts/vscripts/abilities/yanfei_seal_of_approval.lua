@@ -1,10 +1,25 @@
 yanfei_seal_of_approval = class({})
 
+function yanfei_seal_of_approval:GetSealsAmount()
+    return self:GetCaster():GetModifierStackCount("modifier_yanfei_scarlet_seals", self:GetCaster())
+end
+
 function yanfei_seal_of_approval:GetAOERadius()
     local base = self:GetSpecialValueFor("base_aoe")
     local perSeal = self:GetSpecialValueFor("aoe_per_seal")
-    local seals = self:GetCaster():GetModifierStackCount("modifier_yanfei_scarlet_seals", self:GetCaster())
-    return base + seals * perSeal
+    return base + self:GetSealsAmount() * perSeal
+end
+
+function yanfei_seal_of_approval:GetCooldown(level)
+    local baseCd = self.BaseClass.GetCooldown(self, level)
+    local cdReduction = self:GetSpecialValueFor("cd_reduction_per_seal") * self:GetSealsAmount()
+    return baseCd * (1 - cdReduction)
+end
+
+function yanfei_seal_of_approval:GetManaCost(level)
+    local baseMc = self.BaseClass.GetManaCost(self, level)
+    local mcReduction = self:GetSpecialValueFor("mana_cost_reduction_per_seal") * self:GetSealsAmount()
+    return baseMc * (1 - mcReduction)
 end
 
 function yanfei_seal_of_approval:OnSpellStart()
@@ -42,8 +57,8 @@ function yanfei_seal_of_approval:OnSpellStart()
         }
     end
 
-    local particleIndex = ParticleManager:CreateParticle("particles/units/heroes/hero_jakiro/jakiro_liquid_fire_explosion.vpcf", PATTACH_WORLDORIGIN, nil)
-    local particleOffset = Vector(0, 0, 70)
+    local particleIndex = ParticleManager:CreateParticle("particles/econ/items/lina/lina_ti7/lina_spell_light_strike_array_ti7.vpcf", PATTACH_WORLDORIGIN, nil)
+    local particleOffset = Vector(0, 0, 0)
     ParticleManager:SetParticleControl( particleIndex, 0, self:GetCursorPosition() + particleOffset)
 	ParticleManager:SetParticleControl( particleIndex, 1, Vector(radius, 1, 1 ) )
     ParticleManager:ReleaseParticleIndex(particleIndex)

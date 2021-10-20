@@ -10,7 +10,7 @@
 		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
         "AbilityCastPoint"				"0.45 0.45 0.45 0.45"
         "AbilityCastRange"				"625"
-        "AbilityCooldown"				"7.0 7.0 7.0 7.0"
+        "AbilityCooldown"				"9 8 7 6"
         "AbilityManaCost"				"100 110 120 130"
 		"AbilityTextureName"			"lina_light_strike_array"
 
@@ -18,23 +18,33 @@
         {
             "01"
             {
-                "var_type"              "FIELD_INTEGER"
-                "base_aoe"              "200"
+                "var_type"                         "FIELD_INTEGER"
+                "base_aoe"                         "200"
             }
             "02"
             {
-                "var_type"              "FIELD_INTEGER"
-                "aoe_per_seal"          "50"
+                "var_type"                         "FIELD_INTEGER"
+                "aoe_per_seal"                     "50"
             }
             "03"
-            {
-                "var_type"              "FIELD_INTEGER"
-                "base_damage"           "80 120 160 200"
+            {           
+                "var_type"                         "FIELD_INTEGER"
+                "base_damage"                      "80 120 160 200"
             }
             "04"
             {
-                "var_type"              "FIELD_INTEGER"
-                "damage_per_seal"       "20 30 40 50"
+                "var_type"                         "FIELD_INTEGER"
+                "damage_per_seal"                  "20 30 40 50"
+            }
+            "05"
+            {
+                "var_type"                         "FIELD_FLOAT"
+                "cd_reduction_per_seal"            "0.125"
+            }
+            "05"
+            {
+                "var_type"                         "FIELD_FLOAT"
+                "mana_cost_reduction_per_seal"     "0.125"
             }
         }
     }
