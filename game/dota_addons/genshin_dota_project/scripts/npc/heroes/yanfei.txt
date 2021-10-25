@@ -4,6 +4,7 @@
     {
         "override_hero"                "npc_dota_hero_lina"
 
+        // Abilities
         "Ability1"		               "yanfei_seal_of_approval"
         "Ability2"		               "yanfei_signed_edict"
         "Ability3"		               "yanfei_scarlet_seals"
@@ -28,5 +29,40 @@
         "Ability22"		               ""
         "Ability23"		               ""
         "Ability24"		               ""
+
+        // Hp and mana
+        "StatusHealth"                 "200"
+        "StatusHealthRegen"            "0.25"
+        "StatusMana"                   "75"
+        "StatusManaRegen"              "0"
+
+        // Resistances
+        "ArmorPhysical"                "0"
+        "MagicalResistance"            "25"
+
+        // Attack
+        "AttackDamageMin"              "21"
+        "AttackDamageMax"              "29"
+        "AttackRate"                   "1.6"
+        "AttackAnimationPoint"         "0.65"
+        "AttackRange"                  "670"
+        "ProjectileSpeed"              "900"
+
+        // Attributes
+        "AttributePrimary"             "DOTA_ATTRIBUTE_INTELLECT"
+        "AttributeBaseStrength"        "20"
+        "AttributeStrengthGain"        "2.4"
+        "AttributeBaseAgility"         "23"
+        "AttributeAgilityGain"         "2.1"
+        "AttributeBaseIntelligence"    "30"
+        "AttributeIntelligenceGain"    "3.7"
+
+        // Movement
+        "MovementSpeed"                "290"
+        "MovementTurnRate"             "0.6"
+
+        // Vision
+        "VisionDaytimeRange"           "1800"
+        "VisionNighttimeRange"         "800"
     }
 }
