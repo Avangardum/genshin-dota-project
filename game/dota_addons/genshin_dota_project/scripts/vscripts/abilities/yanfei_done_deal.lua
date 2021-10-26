@@ -33,9 +33,15 @@ function yanfei_done_deal:OnSpellStart()
 
     self:GetCaster():AddNewModifier(self:GetCaster(), self, "modifier_yanfei_done_deal_brilliance", { duration = self:GetSpecialValueFor("duration") })
 
+    self:PlayEffects()
+end
+
+function yanfei_done_deal:PlayEffects()
     local particleIndex = ParticleManager:CreateParticle("particles/units/heroes/hero_huskar/huskar_inner_fire.vpcf", PATTACH_WORLDORIGIN, nil)
     local particleRadiusMultiplier = 1.5
     ParticleManager:SetParticleControl( particleIndex, 0, self:GetCaster():GetOrigin())
 	ParticleManager:SetParticleControl( particleIndex, 1, Vector(self:GetSpecialValueFor("aoe") * particleRadiusMultiplier, 1, 1 ) )
     ParticleManager:ReleaseParticleIndex(particleIndex)
+
+    EmitSoundOn("Hero_Jakiro.LiquidFire", self:GetCaster())
 end

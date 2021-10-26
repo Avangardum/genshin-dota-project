@@ -62,9 +62,15 @@ function yanfei_seal_of_approval:OnSpellStart()
         }
     end
 
+    self:PlayEffects(self:GetCursorPosition(), radius)
+end
+
+function yanfei_seal_of_approval:PlayEffects(position, radius)
     local particleIndex = ParticleManager:CreateParticle("particles/econ/items/lina/lina_ti7/lina_spell_light_strike_array_ti7.vpcf", PATTACH_WORLDORIGIN, nil)
     local particleOffset = Vector(0, 0, 0)
-    ParticleManager:SetParticleControl( particleIndex, 0, self:GetCursorPosition() + particleOffset)
+    ParticleManager:SetParticleControl( particleIndex, 0, position + particleOffset)
 	ParticleManager:SetParticleControl( particleIndex, 1, Vector(radius, 1, 1 ) )
     ParticleManager:ReleaseParticleIndex(particleIndex)
+
+    EmitSoundOnLocationWithCaster(position, "Ability.LightStrikeArray", self:GetCaster())
 end
