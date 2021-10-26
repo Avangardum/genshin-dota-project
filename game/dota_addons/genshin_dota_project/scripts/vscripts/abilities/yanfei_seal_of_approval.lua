@@ -31,7 +31,12 @@ function yanfei_seal_of_approval:OnSpellStart()
     if scarletSealsModifier ~= nil then
         sealsConsumed = scarletSealsModifier:RemoveStacks()
     end
-    local damage = baseDamage + damagePerSeal * sealsConsumed
+    local brillianceModifier = self:GetCaster():FindModifierByName("modifier_yanfei_done_deal_brilliance")
+    local brillinceMultiplier = 1
+    if brillianceModifier ~= nil then
+        brillinceMultiplier = brillianceModifier.sealOfApprovalDamageMultiplier
+    end
+    local damage = (baseDamage + damagePerSeal * sealsConsumed) * brillinceMultiplier
 
     local targets = FindUnitsInRadius(
         self:GetCaster():GetTeamNumber(),                   -- team

@@ -1,0 +1,47 @@
+"DOTAAbilities"
+{
+    "yanfei_done_deal"
+    {
+        "BaseClass"					    "ability_lua"
+        "ScriptFile"					"abilities/yanfei_done_deal.lua"
+        
+        "AbilityType"                   "DOTA_ABILITY_TYPE_ULTIMATE"
+        "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"	
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+        "AbilityCastPoint"				"0"
+        "AbilityCooldown"				"140 120 100"
+        "AbilityManaCost"				"300 400 500"
+        "AbilityCastRange"              "600"
+		"AbilityTextureName"			"leshrac_pulse_nova"
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"              "FIELD_INTEGER"
+                "aoe"                   "600"
+            }
+            "02"
+            {
+                "var_type"              "FIELD_INTEGER"
+                "damage"                "200 300 400"
+            }
+            "03"
+            {
+                "var_type"              "FIELD_FLOAT"
+                "duration"              "15"
+            }
+            "04"
+            {
+                "var_type"              "FIELD_FLOAT"
+                "seal_grant_interval"   "1"
+            }
+            "05"
+            {
+                "var_type"                              "FIELD_FLOAT"
+                "seal_of_approval_damage_multiplier"    "1.3 1.45 1.6"
+            }
+        }
+    }
+}
