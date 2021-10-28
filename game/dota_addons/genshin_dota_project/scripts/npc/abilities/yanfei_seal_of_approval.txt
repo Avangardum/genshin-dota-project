@@ -41,7 +41,7 @@
                 "var_type"                         "FIELD_FLOAT"
                 "cd_reduction_per_seal"            "0.125"
             }
-            "05"
+            "06"
             {
                 "var_type"                         "FIELD_FLOAT"
                 "mana_cost_reduction_per_seal"     "0.125"
