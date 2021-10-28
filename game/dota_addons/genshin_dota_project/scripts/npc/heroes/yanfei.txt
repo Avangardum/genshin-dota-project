@@ -41,8 +41,8 @@
         "MagicalResistance"            "25"
 
         // Attack
-        "AttackDamageMin"              "21"
-        "AttackDamageMax"              "29"
+        "AttackDamageMin"              "9"
+        "AttackDamageMax"              "15"
         "AttackRate"                   "1.6"
         "BaseAttackSpeed"	           "100"
         "AttackAnimationPoint"         "0.65"

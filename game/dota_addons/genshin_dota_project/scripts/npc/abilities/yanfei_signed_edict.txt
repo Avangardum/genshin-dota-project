@@ -8,9 +8,9 @@
         "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_AOE"
 		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"	
 		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
-        "AbilityCastPoint"				"0.45 0.45 0.45 0.45"
+        "AbilityCastPoint"				"0.45"
         "AbilityCastRange"				"625"
-        "AbilityCooldown"				"7.0 7.0 7.0 7.0"
+        "AbilityCooldown"				"9"
         "AbilityManaCost"				"100 110 120 130"
 		"AbilityTextureName"			"jakiro_liquid_fire"
 
