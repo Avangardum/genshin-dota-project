@@ -3,22 +3,17 @@
 	TeamCount = 2
 	maps = 
 	[
-		"template_map",
 		"dota",
 	]
 	IsPlayable = 1
 	PenaltiesEnabled = 0
 	CheckAFKPlayers = false
-	HeroGuidesSupported = 1
+	HeroGuidesSupported = 0
 	map_options = 
 	[
 		{
 			MaxPlayers = 10
 			map = "dota"
-		},
-		{
-			MaxPlayers = 2
-			map = "template_map"
 		},
 	]
 	HideInTools = false

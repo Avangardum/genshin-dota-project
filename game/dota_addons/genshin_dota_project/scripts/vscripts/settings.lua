@@ -3,7 +3,7 @@ USE_DEBUG = false                       -- Should we print statements on almost 
 
 ENABLE_HERO_RESPAWN = true              -- Should the heroes automatically respawn on a timer or stay dead until manually respawned
 UNIVERSAL_SHOP_MODE = false             -- Should the shops contain all items?
-ALLOW_SAME_HERO_SELECTION = false       -- Should we let people select the same hero as each other
+ALLOW_SAME_HERO_SELECTION = true        -- Should we let people select the same hero as each other
 LOCK_TEAMS = false                      -- Should we Lock (true) or unlock (false) team assignemnt. If team assignment is locked players cannot change teams.
 
 CUSTOM_GAME_SETUP_TIME = 25.0           -- How long should custom game setup last - the screen where players pick a team?
