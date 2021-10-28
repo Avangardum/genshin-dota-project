@@ -1,0 +1,34 @@
+"lang"
+{
+	"Language"		"Russian"
+	"Tokens"
+	{		
+		"DOTA_GoodGuys"   								                        "Свет"
+		"DOTA_BadGuys"    								                        "Тьма"
+		
+		//--------------------
+		// Abilities
+		//--------------------
+		// Yanfei
+		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_Description"				"Наносит пиро урон врагам в области. Багровые печати увеличивают урон и радиус и уменьшают расход маны и перезарядку."
+		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_base_aoe"					"БАЗОВЫЙ РАДИУС:"
+		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_aoe_per_seal"				"РАДИУС ЗА ПЕЧАТЬ:"
+		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_base_damage"				"БАЗОВЫЙ УРОН:"
+		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_damage_per_seal"			"УРОН ЗА ПЕЧАТЬ:"
+		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_cd_reduction_per_seal"	"СНИЖЕНИЕ ПЕРЕЗАРЯДКИ ЗА ПЕЧАТЬ:"
+		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_mana_cost_reduction_per_seal"		"СНИЖЕНИЕ РАСХОДА МАНЫ ЗА ПЕЧАТЬ:"
+		"DOTA_Tooltip_Ability_yanfei_signed_edict_Description"					"Наносит пиро урон врагам в области. Даёт максимальное количество багровых печатей, если задевает врага."
+		"DOTA_Tooltip_Ability_yanfei_signed_edict_aoe"							"РАДИУС:"
+		"DOTA_Tooltip_Ability_yanfei_signed_edict_damage"						"УРОН:"
+		"DOTA_Tooltip_Ability_yanfei_scarlet_seals_Description"					"Даёт 1 багровую печать, когда вы попадаете атакой по врагу. Каждая печать увеличивает урон."
+		"DOTA_Tooltip_Ability_yanfei_scarlet_seals_damage_per_stack"			"УРОН ЗА ПЕЧАТЬ:"
+		"DOTA_Tooltip_Ability_yanfei_scarlet_seals_max_stacks"					"МАКСИМУМ ПЕЧАТЕЙ:"
+		"DOTA_Tooltip_modifier_yanfei_scarlet_seals_Description"				"УРОН УВЕЛИЧЕН НА %dMODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE%"
+		"DOTA_Tooltip_Ability_yanfei_done_deal_Description"						"Наносит пиро урон вокруг Янь Фей, даёт ей максимальное количество багровых печатей и эффект Блеска. Блеск увеличивает урон от Seal of Approval и периодически даёт ей багровые печати."
+		"DOTA_Tooltip_Ability_yanfei_done_deal_aoe"								"РАДИУС:"
+		"DOTA_Tooltip_Ability_yanfei_done_deal_damage"							"УРОН:"
+		"DOTA_Tooltip_Ability_yanfei_done_deal_duration"						"ДЛИТЕЛЬНОСТЬ БЛЕСКА:"
+		"DOTA_Tooltip_Ability_yanfei_done_deal_seal_grant_interval"				"ИНТЕРВАЛ ПОЛУЧЕНИЯ БАГРОВЫХ ПЕЧАТЕЙ:"
+		"DOTA_Tooltip_Ability_yanfei_done_deal_seal_of_approval_damage_multiplier"		"МНОЖИТЕЛЬ УРОНА ОТ SEAL OF APPROVAL:"
+	}
+}
