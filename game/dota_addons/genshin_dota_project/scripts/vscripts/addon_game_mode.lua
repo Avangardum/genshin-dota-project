@@ -11,6 +11,7 @@ end
 require('util')
 require('libraries/timers')                      -- Core lua library
 require('libraries/player_resource')             -- Core lua library
+require('libraries/lualinq')
 require('gamemode')  
 require('test')                            -- Core barebones file
 require('genshin_elements')
@@ -61,29 +62,7 @@ end
 function Activate()
 	DebugPrint("[BAREBONES] Activating ...")
 	print("Your custom game is activating.")
-	GameRules:GetGameModeEntity():SetThink("WaterWetThinker", barebones, "GlobalThink", 2)
+	GameRules:GetGameModeEntity():SetThink("GenshinElementsThinker", GenshinElements)
 	barebones:InitGameMode()
 	Test:Start()
-end
-
-function barebones:WaterWetThinker()
-	local units = FindUnitsInRadius(
-		DOTA_TEAM_GOODGUYS, 
-		Vector(0, 0, 0), 
-		nil, 
-		FIND_UNITS_EVERYWHERE, 
-		DOTA_UNIT_TARGET_TEAM_BOTH,
-		DOTA_UNIT_TARGET_ALL,
-		DOTA_UNIT_TARGET_FLAG_NONE,
-		FIND_ANY_ORDER,
-		false
-    )
-
-	for _, unit in pairs(units) do
-		if unit:GetOrigin().z == 0 then
-			GenshinElements:ApplyElement{caster = unit, target = unit, element = GenshinElements.HYDRO}
-		end
-	end
-
-	return 0.1
 end

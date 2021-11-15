@@ -3,7 +3,7 @@
 #base "units/npc_dota_custom_dummy_unit.txt"
 #base "units/npc_dota_custom_illusion_base.txt"
 #base "units/npc_dota_creature_gnoll_assassin.txt"
-#base "units/npc_gdp_element_test_unit.txt"
+#base "units/npc_dota_element_test_unit.txt"
 
 "DOTAUnits"
 {

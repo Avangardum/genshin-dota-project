@@ -6,6 +6,8 @@ LinkLuaModifier("modifier_cryo_effect", "modifiers/modifier_cryo_effect.lua", LU
 LinkLuaModifier("modifier_electro_effect", "modifiers/modifier_electro_effect.lua", LUA_MODIFIER_MOTION_NONE)
 LinkLuaModifier("modifier_anemo_effect", "modifiers/modifier_anemo_effect.lua", LUA_MODIFIER_MOTION_NONE)
 LinkLuaModifier("modifier_geo_effect", "modifiers/modifier_geo_effect.lua", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("modifier_frozen", "modifiers/modifier_frozen", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("modifier_frozen_immunity", "modifiers/modifier_frozen_immunity", LUA_MODIFIER_MOTION_NONE)
 
 GenshinElements = {}
 
@@ -24,8 +26,8 @@ GenshinElements.DEFAULT_ELEMENT_DURATIONS =
     [GenshinElements.HYDRO] = 5,
     [GenshinElements.CRYO] = 5,
     [GenshinElements.ELECTRO] = 5,
-    [GenshinElements.ANEMO] = 5,
-    [GenshinElements.GEO] = 5
+    [GenshinElements.ANEMO] = 0,
+    [GenshinElements.GEO] = 0
 }
 
 GenshinElements.ELEMENTAL_MODIFIER_NAMES =
@@ -52,6 +54,7 @@ GenshinElements.VAPORIZE_PYRO_DAMAGE_MULTIPLIER = 1.5
 GenshinElements.VAPORIZE_HYDRO_DAMAGE_MULTIPLIER = 2
 GenshinElements.MELT_PYRO_DAMAGE_MULTIPLIER = 2
 GenshinElements.MELT_CRYO_DAMAGE_MULTIPLIER = 1.5
+GenshinElements.FROZEN_IMMUNITY_MULTIPLIER = 2 -- frozen immunity duration = frozen duration * GenshinElements.FROZEN_IMMUNITY_MULTIPLIER
 GenshinElements.OVERLOAD_DAMAGE_FUNCTION = function(x) return 0.3 * x * x + 34 end
 
 
@@ -82,16 +85,20 @@ function GenshinElements:ApplyElement(args)
 
     -- elemental reactions
     local damageMuliplier = 1
-    if(self:UnitHasElementalModifiers(args.target, {self.PYRO, self.HYDRO})) then
+    if self:UnitHasElementalModifiers(args.target, {self.PYRO, self.HYDRO}) then
         damageMuliplier = self:TriggerVaporize(args)
     end
-    if(self:UnitHasElementalModifiers(args.target, {self.PYRO, self.CRYO})) then
+    if self:UnitHasElementalModifiers(args.target, {self.PYRO, self.CRYO}) then
         damageMuliplier = self:TriggerMelt(args)
+    end
+    if self:UnitHasElementalModifiers(args.target, {self.CRYO, self.HYDRO}) then
+        self:TriggerFrozen(args)
     end
 
     return damageMuliplier
 end
 
+-- Private method. Do not call from the outside of the GenshinElements library! Accepts the same arguments as ApplyElements.
 function GenshinElements:TriggerVaporize(args)
     local damageMuliplier
     if args.element == self.PYRO then damageMuliplier = self.VAPORIZE_PYRO_DAMAGE_MULTIPLIER
@@ -103,6 +110,7 @@ function GenshinElements:TriggerVaporize(args)
     return damageMuliplier
 end
 
+-- Private method. Do not call from the outside of the GenshinElements library! Accepts the same arguments as ApplyElements.
 function GenshinElements:TriggerMelt(args)
     local damageMuliplier
     if args.element == self.PYRO then damageMuliplier = self.MELT_PYRO_DAMAGE_MULTIPLIER
@@ -112,6 +120,25 @@ function GenshinElements:TriggerMelt(args)
     local particleID = ParticleManager:CreateParticle("particles/genshin_elemental_reactions/melt.vpcf", PATTACH_OVERHEAD_FOLLOW, args.target)
     ParticleManager:ReleaseParticleIndex(particleID)
     return damageMuliplier
+end
+
+-- Private method. Do not call from the outside of the GenshinElements library! Accepts the same arguments as ApplyElements.
+function GenshinElements:TriggerFrozen(args)
+    assert(self:UnitHasElementalModifiers(args.target, { self.HYDRO, self.CRYO }), "frozen target doesn't have hydro and cryo modifiers before the reaction")
+    local hydroModifier = args.target:FindModifierByName("modifier_hydro_effect")
+    local cryoModifier = args.target:FindModifierByName("modifier_cryo_effect")
+    self:RemoveElementalModifierFromUnit(args.target, self.HYDRO)
+    local hasFrozenImmunity = args.target:FindModifierByName("modifier_frozen_immunity") ~= nil;
+    if (hasFrozenImmunity) then return end
+    local duration = math.min(hydroModifier:GetRemainingTime(), cryoModifier:GetRemainingTime());
+    args.target:AddNewModifier( args.caster, nil, "modifier_frozen", { duration = duration } )
+    args.target:AddNewModifier( args.caster, nil, "modifier_frozen_immunity", { duration = duration * self.FROZEN_IMMUNITY_MULTIPLIER } )
+    local particleID = ParticleManager:CreateParticle("particles/genshin_elemental_reactions/frozen.vpcf", PATTACH_OVERHEAD_FOLLOW, args.target)
+    ParticleManager:ReleaseParticleIndex(particleID)
+    assert(not self:UnitHasElementalModifier(args.target, self.HYDRO), "frozen target still has the hydro effect after the reaction")
+    assert(self:UnitHasElementalModifier(args.target, self.CRYO), "frozen target doesn't have the cryo effect after the reaction")
+    assert(args.target:FindModifierByName("modifier_frozen"), "frozen target doesn't have the frozen modifier after the reaction")
+    assert(args.target:FindModifierByName("modifier_frozen_immunity"), "frozen target doesn't have the frozen immunity modifier after the reaction")
 end
 
 function GenshinElements:UnitHasElementalModifier(unit, element)
@@ -136,4 +163,26 @@ function GenshinElements:RemoveElementalModifiersFromUnit(unit, elements)
     for k, v in pairs(elements) do
         self:RemoveElementalModifierFromUnit(unit, v)
     end
+end
+
+-- The main Genshin elements thinker. All other thinkers are called from here
+function GenshinElements:GenshinElementsThinker()
+    self:WaterWetThinker()
+    self:UnfreezeThinker()
+
+    return 0.1
+end
+
+-- Applies a hydro modifier on units in water
+function GenshinElements:WaterWetThinker()
+    from(FindAllUnits())
+    :where(function(x) return x:GetOrigin().z == 0 end)
+    :foreach(function(x) self:ApplyElement{ caster = x, target = x, element = self.HYDRO } end)
+end
+
+-- Removes a frozen effect from all units without cryo effect
+function GenshinElements:UnfreezeThinker()
+    from(FindAllUnits())
+    :where(function(x) return not self:UnitHasElementalModifier(x, self.CRYO) end)
+    :foreach(function(x) x:RemoveModifierByName("modifier_frozen") end)
 end

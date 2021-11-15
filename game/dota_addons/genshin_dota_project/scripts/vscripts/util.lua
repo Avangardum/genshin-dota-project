@@ -180,3 +180,19 @@ function SendErrorMessage(pID, string)
   end
   EmitSoundOnClient("General.Cancel", PlayerResource:GetPlayer(pID))
 end
+
+-- My functions
+
+function FindAllUnits()
+    return FindUnitsInRadius(
+		DOTA_TEAM_GOODGUYS, 
+		Vector(0, 0, 0), 
+		nil, 
+		FIND_UNITS_EVERYWHERE, 
+		DOTA_UNIT_TARGET_TEAM_BOTH,
+		DOTA_UNIT_TARGET_ALL,
+		DOTA_UNIT_TARGET_FLAG_NONE,
+		FIND_ANY_ORDER,
+		false
+    )
+end

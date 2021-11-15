@@ -1,0 +1,27 @@
+"DOTAUnits"
+{
+	//=================================================================================	
+	// Element test unit
+	//=================================================================================
+	"npc_dota_element_test_unit"	
+	{
+		// General
+		//----------------------------------------------------------------
+		"Model"						"models/creeps/lane_creeps/creep_radiant_ranged/radiant_ranged_crystal.vmdl"
+		"BaseClass"					"npc_dota_creature"
+
+		// Abilities
+		//----------------------------------------------------------------
+		"Ability1"					"element_test_unit_pyro_damage"
+		"Ability2"					"element_test_unit_hydro_damage"
+		"Ability3"					"element_test_unit_cryo_damage"
+		"Ability4"					"element_test_unit_electro_damage"
+		"Ability5"					"element_test_unit_anemo_damage"
+		"Ability6"					"element_test_unit_geo_damage"
+
+		// Movement
+		//----------------------------------------------------------------
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"
+		"MovementSpeed"				"270"
+	}
+}
