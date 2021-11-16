@@ -196,3 +196,6 @@ function FindAllUnits()
 		false
     )
 end
+
+function AssertType() end -- placeholder TODO remove
+function AssertOneOfTypes() end -- placeholder TODO remove

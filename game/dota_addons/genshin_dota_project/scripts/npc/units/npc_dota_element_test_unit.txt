@@ -9,6 +9,7 @@
 		//----------------------------------------------------------------
 		"Model"						"models/creeps/lane_creeps/creep_radiant_ranged/radiant_ranged_crystal.vmdl"
 		"BaseClass"					"npc_dota_creature"
+		"Level"                     "30"
 
 		// Abilities
 		//----------------------------------------------------------------
