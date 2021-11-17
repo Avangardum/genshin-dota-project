@@ -50,13 +50,14 @@ GenshinElements.ELEMENT_NAMES =
     [GenshinElements.GEO] = "geo"
 }
 
+GenshinElements.NIL_CASTER_LEVEL = 1
 GenshinElements.VAPORIZE_PYRO_DAMAGE_MULTIPLIER = 1.5
 GenshinElements.VAPORIZE_HYDRO_DAMAGE_MULTIPLIER = 2
 GenshinElements.MELT_PYRO_DAMAGE_MULTIPLIER = 2
 GenshinElements.MELT_CRYO_DAMAGE_MULTIPLIER = 1.5
 GenshinElements.FROZEN_IMMUNITY_MULTIPLIER = 2 -- frozen immunity duration = frozen duration * GenshinElements.FROZEN_IMMUNITY_MULTIPLIER
-GenshinElements.OVERLOAD_DAMAGE_FUNCTION = function(x) return 0.3 * x * x + 34 end
-
+GenshinElements.OVERLOADED_DAMAGE_FUNCTION = function(x) return 0.3 * x * x + 34 end
+GenshinElements.OVERLOADED_RADIUS = 500
 
 -- Accepts a damage table with all arguments required for ApplyDamage, plus it shoud contain an element
 function GenshinElements:ApplyElementalDamage(damageTable)
@@ -97,6 +98,9 @@ function GenshinElements:ApplyElement(args)
     end
     if self:UnitHasElementalModifiers(args.target, {self.CRYO, self.HYDRO}) then
         self:TriggerFrozen(args)
+    end
+    if self:UnitHasElementalModifiers(args.target, {self.PYRO, self.ELECTRO}) then
+        self:TriggerOverloaded(args)
     end
 
     return damageMuliplier
@@ -153,6 +157,53 @@ function GenshinElements:TriggerFrozen(args)
     assert(self:UnitHasElementalModifier(args.target, self.CRYO), "frozen target doesn't have the cryo effect after the reaction")
     assert(args.target:FindModifierByName("modifier_frozen"), "frozen target doesn't have the frozen modifier after the reaction")
     assert(args.target:FindModifierByName("modifier_frozen_immunity"), "frozen target doesn't have the frozen immunity modifier after the reaction")
+end
+
+-- Private method. Do not call from the outside of the GenshinElements library! Accepts the same arguments as ApplyElements.
+function GenshinElements:TriggerOverloaded(args)
+    assert(IsServer(), "elemental reaction was triggered on client")
+    assert(self:UnitHasElementalModifier(args.target, self.PYRO), "overloaded target doesn't have a pyro modifier before the reaction")
+    assert(self:UnitHasElementalModifier(args.target, self.ELECTRO), "overloaded target doesn't have an electro modifier before the reaction")
+    self:RemoveElementalModifiersFromUnit(args.target, { self.PYRO, self.ELECTRO })
+    local affectedUnits = from(
+        FindUnitsInRadius(
+        args.target:GetTeamNumber(),                        -- team
+        args.target:GetOrigin(),                            -- location
+        nil,                                                -- cacheUnit
+        self.OVERLOADED_RADIUS,                                  -- radius
+        DOTA_UNIT_TARGET_TEAM_BOTH,                         -- teamFilter
+        DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC,     -- targetType
+        DOTA_UNIT_TARGET_FLAG_NONE,                         -- flagFilter
+        FIND_ANY_ORDER,                                     -- order
+        false                                               -- canGrowCache
+        )
+    )
+    :where(function(x) return args.caster == nil or x:GetTeamNumber() ~= args.caster:GetTeamNumber() end) -- exclude caster's allies
+    :toArray()
+    local casterLevel
+    if (args.caster ~= nil) then
+        casterLevel = args.caster:GetLevel()
+    else
+        casterLevel = NIL_CASTER_LEVEL
+    end
+    for _, unit in pairs(affectedUnits) do
+        ApplyDamage
+        {
+            victim      = unit,
+            attacker    = args.caster,
+            damage      = self.OVERLOADED_DAMAGE_FUNCTION(casterLevel),
+            damage_type = DAMAGE_TYPE_MAGICAL,
+        }
+    end
+    local particleID = ParticleManager:CreateParticle("particles/genshin_elemental_reactions/overloaded.vpcf", PATTACH_OVERHEAD_FOLLOW, args.target)
+    ParticleManager:ReleaseParticleIndex(particleID)
+    local explosionParticleId = ParticleManager:CreateParticle("particles/econ/items/abaddon/abaddon_alliance/abaddon_aphotic_shield_alliance_explosion.vpcf", 
+    PATTACH_WORLDORIGIN, args.target)
+    ParticleManager:SetParticleControl(explosionParticleId, 0, args.target:GetOrigin())
+    ParticleManager:SetParticleControl(explosionParticleId, 1, Vector(self.OVERLOADED_RADIUS, 1, 1))
+    ParticleManager:ReleaseParticleIndex(explosionParticleId)
+    assert(not self:UnitHasElementalModifier(args.target, self.PYRO), "overloaded target still has a pyro effect after the reaction")
+    assert(not self:UnitHasElementalModifier(args.target, self.ELECTRO), "overloaded target still has an electro effect after the reaction")
 end
 
 function GenshinElements:UnitHasElementalModifier(unit, element)
