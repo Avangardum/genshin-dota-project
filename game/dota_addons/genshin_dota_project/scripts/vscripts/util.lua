@@ -196,3 +196,29 @@ function FindAllUnits()
 		false
     )
 end
+
+function AssertType(object, objectName, requiredType)
+    assert(type(requiredType) == "string", "requiredType is not a string")
+    assert(type(objectName) == "string", "objectName is not a string")
+    local objectType = type(object)
+    AssertWithErrorLevel(objectType == requiredType, objectName.." is "..objectType..". Expected "..requiredType, 2)
+end
+
+function AssertTypeOneOf(object, objectName, requiredTypes)
+    assert(type(requiredTypes) == "table", "requiredTypes is not a table")
+    assert(#requiredTypes > 0, "requiredTypes is empty")
+    from(requiredTypes):foreach(function(x) assert(type(x) == "string", "requiredTypes contains a member of type "..type(x)..". Expected strings only") end)
+    assert(type(objectName) == "string", "objectName is not a string")
+    local objectType = type(object)
+    local message = objectName.." is "..objectType..". Expected one of types: ";
+    from(requiredTypes):foreach(function(x) message = message..x.." " end)
+    AssertWithErrorLevel(from(requiredTypes):contains(objectType), message, 2)
+end
+
+function AssertWithErrorLevel(condition, message, level)
+    assert(type(message) == "string", "message is not string")
+    assert(type(level) == "number", "level is not a number")
+    if not condition then
+        error(message, level)
+    end
+end

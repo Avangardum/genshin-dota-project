@@ -58,11 +58,9 @@ GenshinElements.FROZEN_IMMUNITY_MULTIPLIER = 2 -- frozen immunity duration = fro
 GenshinElements.OVERLOAD_DAMAGE_FUNCTION = function(x) return 0.3 * x * x + 34 end
 
 
--- Requires a damage table with all parameters required for ApplyDamage, plus it shoud contain an element
+-- Accepts a damage table with all arguments required for ApplyDamage, plus it shoud contain an element
 function GenshinElements:ApplyElementalDamage(damageTable)
-    if damageTable.element == nil then
-        error("damageTable.element is nil")
-    end
+    AssertType(damageTable, "damageTable", "table")
     local applyElementTable = 
     {
         caster = damageTable.attacker,
@@ -74,11 +72,17 @@ function GenshinElements:ApplyElementalDamage(damageTable)
     ApplyDamage(damageTable)
 end
 
--- Requires a table with following arguments: target, element, caster (optional)
+-- Accepts a table with following arguments: 
+-- target  : CDOTA_BaseNPC
+-- element : number
+-- caster  : CDOTA_BaseNPC | nil
 -- Returns damage multiplier if melt or vaporize reaction was trigerred, otherwise returns 1
 function GenshinElements:ApplyElement(args)
-    if args.target == nil then error("target is nil") end
-    if args.element == nil then error("element is nil") end
+    AssertType(args, "args", "table")
+    AssertType(args.target, "target", "table")
+    AssertType(args.element, "element", "number")
+    assert(self.MIN_ELEMENT <= args.element and args.element <= self.MAX_ELEMENT, "element is out of range")
+    AssertTypeOneOf(args.caster, "caster", { "table", "nil" })
 
     args.duration = args.duration or self.DEFAULT_ELEMENT_DURATIONS[args.element]
     args.target:AddNewModifier( args.caster, nil, self.ELEMENTAL_MODIFIER_NAMES[args.element], { duration = args.duration } )
@@ -100,6 +104,9 @@ end
 
 -- Private method. Do not call from the outside of the GenshinElements library! Accepts the same arguments as ApplyElements.
 function GenshinElements:TriggerVaporize(args)
+    assert(self:UnitHasElementalModifier(args.target, self.HYDRO), "vaporize target doesn't have a hydro modifier before the reaction")
+    assert(self:UnitHasElementalModifier(args.target, self.PYRO), "vaporize target doesn't have a pyro modifier before the reaction")
+    assert(IsServer(), "vaporize was triggered on a client")
     local damageMuliplier
     if args.element == self.PYRO then damageMuliplier = self.VAPORIZE_PYRO_DAMAGE_MULTIPLIER
     elseif args.element == self.HYDRO then damageMuliplier = self.VAPORIZE_HYDRO_DAMAGE_MULTIPLIER
@@ -107,24 +114,31 @@ function GenshinElements:TriggerVaporize(args)
     self:RemoveElementalModifiersFromUnit(args.target, {self.PYRO, self.HYDRO})
     local particleID = ParticleManager:CreateParticle("particles/genshin_elemental_reactions/vaporize.vpcf", PATTACH_OVERHEAD_FOLLOW, args.target)
     ParticleManager:ReleaseParticleIndex(particleID)
+    assert(not self:UnitHasElementalModifier(args.target, self.HYDRO), "vaporize target has a hydro modifier after the reaction")
+    assert(not self:UnitHasElementalModifier(args.target, self.PYRO), "vaporize target has a pyro modifier after the reaction")
     return damageMuliplier
 end
 
 -- Private method. Do not call from the outside of the GenshinElements library! Accepts the same arguments as ApplyElements.
 function GenshinElements:TriggerMelt(args)
-    local damageMuliplier
+    assert(self:UnitHasElementalModifier(args.target, self.CRYO), "melt target doesn't have a cryo modifier before the reaction")
+    assert(self:UnitHasElementalModifier(args.target, self.PYRO), "melt target doesn't have a pyro modifier before the reaction")
+    assert(IsServer(), "melt was triggered on a client")
     if args.element == self.PYRO then damageMuliplier = self.MELT_PYRO_DAMAGE_MULTIPLIER
     elseif args.element == self.CRYO then damageMuliplier = self.MELT_CRYO_DAMAGE_MULTIPLIER
     else error("melt trigerred by the " .. self.ELEMENT_NAMES[args.element] .. " element") end
     self:RemoveElementalModifiersFromUnit(args.target, {self.PYRO, self.CRYO})
     local particleID = ParticleManager:CreateParticle("particles/genshin_elemental_reactions/melt.vpcf", PATTACH_OVERHEAD_FOLLOW, args.target)
     ParticleManager:ReleaseParticleIndex(particleID)
+    assert(not self:UnitHasElementalModifier(args.target, self.CRYO), "melt target has a cryo modifier after the reaction")
+    assert(not self:UnitHasElementalModifier(args.target, self.PYRO), "melt target has a pyro modifier after the reaction")
     return damageMuliplier
 end
 
 -- Private method. Do not call from the outside of the GenshinElements library! Accepts the same arguments as ApplyElements.
 function GenshinElements:TriggerFrozen(args)
     assert(self:UnitHasElementalModifiers(args.target, { self.HYDRO, self.CRYO }), "frozen target doesn't have hydro and cryo modifiers before the reaction")
+    assert(IsServer(), "frozen was triggered on a client")
     local hydroModifier = args.target:FindModifierByName("modifier_hydro_effect")
     local cryoModifier = args.target:FindModifierByName("modifier_cryo_effect")
     self:RemoveElementalModifierFromUnit(args.target, self.HYDRO)
