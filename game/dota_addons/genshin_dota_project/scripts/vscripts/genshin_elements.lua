@@ -141,8 +141,8 @@ end
 
 -- Private method. Do not call from the outside of the GenshinElements library! Accepts the same arguments as ApplyElements.
 function GenshinElements:TriggerFrozen(args)
-    assert(self:UnitHasElementalModifiers(args.target, self.HYDRO), "frozen target doesn't have a hydro modifier before the reaction")
-    assert(self:UnitHasElementalModifiers(args.target, self.CRYO), "frozen target doesn't have a cryo modifier before the reaction")
+    assert(self:UnitHasElementalModifier(args.target, self.HYDRO), "frozen target doesn't have a hydro modifier before the reaction")
+    assert(self:UnitHasElementalModifier(args.target, self.CRYO), "frozen target doesn't have a cryo modifier before the reaction")
     assert(IsServer(), "frozen was triggered on a client")
     local hydroModifier = args.target:FindModifierByName("modifier_hydro_effect")
     local cryoModifier = args.target:FindModifierByName("modifier_cryo_effect")
