@@ -1,0 +1,7 @@
+Naming:
+Functions                               : SampleText
+Game Entities (heroes, abilities, etc.) : sample_text
+Variables                               : sampleText
+Constants                               : SAMPLE_TEXT
+Arguments                               : sampleText
+Files                                   : sample_text
