@@ -13,7 +13,7 @@ Each hero is a separate module. Heroes shouldn't depend on each other
 Dependencies:
 Genshin elements module
 
-Framework (everything can depend on it):
+Framework (every module can use it):
 Dota lua API
 Barebones libraries
 Lualinq

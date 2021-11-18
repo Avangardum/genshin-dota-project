@@ -91,23 +91,23 @@ function GenshinElements:ApplyElement(args)
     -- elemental reactions
     local damageMuliplier = 1
     if self:UnitHasElementalModifiers(args.target, {self.PYRO, self.HYDRO}) then
-        damageMuliplier = self:TriggerVaporize(args)
+        damageMuliplier = self:_TriggerVaporize(args)
     end
     if self:UnitHasElementalModifiers(args.target, {self.PYRO, self.CRYO}) then
-        damageMuliplier = self:TriggerMelt(args)
+        damageMuliplier = self:_TriggerMelt(args)
     end
     if self:UnitHasElementalModifiers(args.target, {self.CRYO, self.HYDRO}) then
-        self:TriggerFrozen(args)
+        self:_TriggerFrozen(args)
     end
     if self:UnitHasElementalModifiers(args.target, {self.PYRO, self.ELECTRO}) then
-        self:TriggerOverloaded(args)
+        self:_TriggerOverloaded(args)
     end
 
     return damageMuliplier
 end
 
--- Private method. Do not call from the outside of the GenshinElements library! Accepts the same arguments as ApplyElements.
-function GenshinElements:TriggerVaporize(args)
+-- Accepts the same arguments as ApplyElements.
+function GenshinElements:_TriggerVaporize(args)
     assert(self:UnitHasElementalModifier(args.target, self.HYDRO), "vaporize target doesn't have a hydro modifier before the reaction")
     assert(self:UnitHasElementalModifier(args.target, self.PYRO), "vaporize target doesn't have a pyro modifier before the reaction")
     assert(IsServer(), "vaporize was triggered on a client")
@@ -123,8 +123,8 @@ function GenshinElements:TriggerVaporize(args)
     return damageMuliplier
 end
 
--- Private method. Do not call from the outside of the GenshinElements library! Accepts the same arguments as ApplyElements.
-function GenshinElements:TriggerMelt(args)
+-- Accepts the same arguments as ApplyElements.
+function GenshinElements:_TriggerMelt(args)
     assert(self:UnitHasElementalModifier(args.target, self.CRYO), "melt target doesn't have a cryo modifier before the reaction")
     assert(self:UnitHasElementalModifier(args.target, self.PYRO), "melt target doesn't have a pyro modifier before the reaction")
     assert(IsServer(), "melt was triggered on a client")
@@ -139,8 +139,8 @@ function GenshinElements:TriggerMelt(args)
     return damageMuliplier
 end
 
--- Private method. Do not call from the outside of the GenshinElements library! Accepts the same arguments as ApplyElements.
-function GenshinElements:TriggerFrozen(args)
+-- Accepts the same arguments as ApplyElements.
+function GenshinElements:_TriggerFrozen(args)
     assert(self:UnitHasElementalModifier(args.target, self.HYDRO), "frozen target doesn't have a hydro modifier before the reaction")
     assert(self:UnitHasElementalModifier(args.target, self.CRYO), "frozen target doesn't have a cryo modifier before the reaction")
     assert(IsServer(), "frozen was triggered on a client")
@@ -160,11 +160,11 @@ function GenshinElements:TriggerFrozen(args)
     assert(args.target:FindModifierByName("modifier_frozen_immunity"), "frozen target doesn't have the frozen immunity modifier after the reaction")
 end
 
--- Private method. Do not call from the outside of the GenshinElements library! Accepts the same arguments as ApplyElements.
-function GenshinElements:TriggerOverloaded(args)
-    assert(IsServer(), "elemental reaction was triggered on client")
+-- Accepts the same arguments as ApplyElements.
+function GenshinElements:_TriggerOverloaded(args)
     assert(self:UnitHasElementalModifier(args.target, self.PYRO), "overloaded target doesn't have a pyro modifier before the reaction")
     assert(self:UnitHasElementalModifier(args.target, self.ELECTRO), "overloaded target doesn't have an electro modifier before the reaction")
+    assert(IsServer(), "elemental reaction was triggered on client")
     self:RemoveElementalModifiersFromUnit(args.target, { self.PYRO, self.ELECTRO })
     local affectedUnits = from(
         FindUnitsInRadius(
@@ -207,11 +207,17 @@ function GenshinElements:TriggerOverloaded(args)
     assert(not self:UnitHasElementalModifier(args.target, self.ELECTRO), "overloaded target still has an electro effect after the reaction")
 end
 
+-- Returns if the given unit has the modifier of the given element
 function GenshinElements:UnitHasElementalModifier(unit, element)
+    AssertType(unit, "unit", "table")
+    AssertType(element, "element", "number")
     return unit:FindModifierByName(self.ELEMENTAL_MODIFIER_NAMES[element]) ~= nil
 end
 
+-- Returns if the given unit has all the modifiers of the given elements
 function GenshinElements:UnitHasElementalModifiers(unit, elements)
+    AssertType(unit, "unit", "table")
+    for _, element in pairs(elements) do assert(self:IsValidElement(element), element.." is not a valid element") end
     for k, v in pairs(elements) do
         if not self:UnitHasElementalModifier(unit, v) then
             return false
@@ -221,33 +227,51 @@ function GenshinElements:UnitHasElementalModifiers(unit, elements)
     return true
 end
 
+-- Removes the modifier of the given element from the given unit
 function GenshinElements:RemoveElementalModifierFromUnit(unit, element)
+    AssertType(unit, "unit", "table")
+    AssertType(element, "element", "number")
     unit:RemoveModifierByName(self.ELEMENTAL_MODIFIER_NAMES[element])
 end
 
+-- Removes all the modifiers of the given elements from the given unit
 function GenshinElements:RemoveElementalModifiersFromUnit(unit, elements)
+    AssertType(unit, "unit", "table")
+    for _, element in pairs(elements) do assert(self:IsValidElement(element), element.." is not a valid element") end
     for k, v in pairs(elements) do
         self:RemoveElementalModifierFromUnit(unit, v)
     end
 end
 
+-- Removes all elemental modifiers from the given unit
+function GenshinElements:RemoveAllElementalModifiersFromUnit(unit)
+    AssertType(unit, "unit", "table")
+    for i = self.MIN_ELEMENT, self.MAX_ELEMENT do
+        self:RemoveElementalModifierFromUnit(unit, i)
+    end
+end
+
+function GenshinElements:IsValidElement(element)
+    return type(element) == "number" and self.MIN_ELEMENT <= element and element <= self.MAX_ELEMENT
+end
+
 -- The main Genshin elements thinker. All other thinkers are called from here
 function GenshinElements:GenshinElementsThinker()
-    self:WaterWetThinker()
-    self:UnfreezeThinker()
+    self:_WaterWetThinker()
+    self:_UnfreezeThinker()
 
     return 0.1
 end
 
 -- Applies a hydro modifier on units in water
-function GenshinElements:WaterWetThinker()
+function GenshinElements:_WaterWetThinker()
     from(FindAllUnits())
     :where(function(x) return x:GetOrigin().z == 0 end)
     :foreach(function(x) self:ApplyElement{ caster = x, target = x, element = self.HYDRO } end)
 end
 
 -- Removes a frozen effect from all units without cryo effect
-function GenshinElements:UnfreezeThinker()
+function GenshinElements:_UnfreezeThinker()
     from(FindAllUnits())
     :where(function(x) return not self:UnitHasElementalModifier(x, self.CRYO) end)
     :foreach(function(x) x:RemoveModifierByName("modifier_frozen") end)

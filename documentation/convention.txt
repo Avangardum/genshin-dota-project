@@ -1,7 +1,17 @@
 Naming:
-Functions                               : SampleText
+Module and library objects              : SampleText
 Game Entities (heroes, abilities, etc.) : sample_text
-Variables                               : sampleText
-Constants                               : SAMPLE_TEXT
+Public Functions                        : SampleText
+Private Functions                       : _SampleText
+Public variables                        : sampleText
+Private variables                       : _sampleText
+Public constants                        : SAMPLE_TEXT
+Private constants                       : _SAMPLE_TEXT
 Arguments                               : sampleText
 Files                                   : sample_text
+
+Private members should never be used outside of their module
+All dependencies between modules should be listed in architecture.txt
+Modules cannot use members of other modules, unless they are dependent on these modules
+Functions should assert their preconditions and postconditions in their beginning and end (right before the return statement)
+Functions should check types of their arguments using assertions from util
