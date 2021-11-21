@@ -12,6 +12,7 @@ require('util')
 require('libraries/timers')                      -- Core lua library
 require('libraries/player_resource')             -- Core lua library
 require('libraries/lualinq')
+require('my_util')
 require('gamemode')  
 require('test')                            -- Core barebones file
 require('genshin_elements')

@@ -8,6 +8,7 @@ LinkLuaModifier("modifier_anemo_effect", "modifiers/modifier_anemo_effect.lua", 
 LinkLuaModifier("modifier_geo_effect", "modifiers/modifier_geo_effect.lua", LUA_MODIFIER_MOTION_NONE)
 LinkLuaModifier("modifier_frozen", "modifiers/modifier_frozen", LUA_MODIFIER_MOTION_NONE)
 LinkLuaModifier("modifier_frozen_immunity", "modifiers/modifier_frozen_immunity", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("modifier_superconduct", "modifiers/modifier_superconduct", LUA_MODIFIER_MOTION_NONE)
 
 GenshinElements = {}
 
@@ -56,8 +57,11 @@ GenshinElements.VAPORIZE_HYDRO_DAMAGE_MULTIPLIER = 2
 GenshinElements.MELT_PYRO_DAMAGE_MULTIPLIER = 2
 GenshinElements.MELT_CRYO_DAMAGE_MULTIPLIER = 1.5
 GenshinElements.FROZEN_IMMUNITY_MULTIPLIER = 2 -- frozen immunity duration = frozen duration * GenshinElements.FROZEN_IMMUNITY_MULTIPLIER
-GenshinElements.OVERLOADED_DAMAGE_FUNCTION = function(x) return 0.3 * x * x + 34 end
+
 GenshinElements.OVERLOADED_RADIUS = 500
+GenshinElements.SUPERCONDUCT_ARMOR_REDUCTION = 10
+GenshinElements.SUPERCONDUCT_RADIUS = 500
+GenshinElements.SUPERCONDUCT_DURATION = 12
 
 -- Accepts a damage table with all arguments required for ApplyDamage, plus it shoud contain an element
 function GenshinElements:ApplyElementalDamage(damageTable)
@@ -101,6 +105,9 @@ function GenshinElements:ApplyElement(args)
     end
     if self:UnitHasElementalModifiers(args.target, {self.PYRO, self.ELECTRO}) then
         self:_TriggerOverloaded(args)
+    end
+    if self:UnitHasElementalModifiers(args.target, {self.CRYO, self.ELECTRO}) then
+        self:_TriggerSuperconduct(args)
     end
 
     return damageMuliplier
@@ -181,18 +188,12 @@ function GenshinElements:_TriggerOverloaded(args)
     )
     :where(function(x) return args.caster == nil or x:GetTeamNumber() ~= args.caster:GetTeamNumber() end) -- exclude caster's allies
     :toArray()
-    local casterLevel
-    if (args.caster ~= nil) then
-        casterLevel = args.caster:GetLevel()
-    else
-        casterLevel = NIL_CASTER_LEVEL
-    end
     for _, unit in pairs(affectedUnits) do
         ApplyDamage
         {
             victim      = unit,
             attacker    = args.caster,
-            damage      = self.OVERLOADED_DAMAGE_FUNCTION(casterLevel),
+            damage      = self:_GetOverloadedDamage(self:_GetCasterLevel(args.caster)),
             damage_type = DAMAGE_TYPE_MAGICAL,
         }
     end
@@ -205,6 +206,48 @@ function GenshinElements:_TriggerOverloaded(args)
     ParticleManager:ReleaseParticleIndex(explosionParticleId)
     assert(not self:UnitHasElementalModifier(args.target, self.PYRO), "overloaded target still has a pyro effect after the reaction")
     assert(not self:UnitHasElementalModifier(args.target, self.ELECTRO), "overloaded target still has an electro effect after the reaction")
+end
+
+function GenshinElements:_TriggerSuperconduct(args)
+    assert(self:UnitHasElementalModifier(args.target, self.ELECTRO), "superconduct target doesn't have an electro modifier before the reaction")
+    assert(self:UnitHasElementalModifier(args.target, self.CRYO), "superconduct target doesn't have a cryo modifier before the reaction")
+    self:RemoveElementalModifiersFromUnit(args.target, { self.ELECTRO, self.CRYO })
+    local affectedUnits = from(
+        FindUnitsInRadius(
+        args.target:GetTeamNumber(),                        -- team
+        args.target:GetOrigin(),                            -- location
+        nil,                                                -- cacheUnit
+        self.SUPERCONDUCT_RADIUS,                           -- radius
+        DOTA_UNIT_TARGET_TEAM_BOTH,                         -- teamFilter
+        DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC,     -- targetType
+        DOTA_UNIT_TARGET_FLAG_NONE,                         -- flagFilter
+        FIND_ANY_ORDER,                                     -- order
+        false                                               -- canGrowCache
+        )
+    )
+    :where(function(x) return args.caster == nil or x:GetTeamNumber() ~= args.caster:GetTeamNumber() end) -- exclude caster's allies
+    :toArray()
+    for _, unit in pairs(affectedUnits) do
+        ApplyDamage
+        {
+            victim      = unit,
+            attacker    = args.caster,
+            damage      = self:_GetSuperconductDamage(self:_GetCasterLevel(args.caster)),
+            damage_type = DAMAGE_TYPE_MAGICAL,
+        }
+        local superconductModifier = unit:AddNewModifier(args.caster, nil, "modifier_superconduct", 
+            { duration = self.SUPERCONDUCT_DURATION, armorReduction = self.SUPERCONDUCT_ARMOR_REDUCTION })
+    end
+    local particleID = ParticleManager:CreateParticle("particles/genshin_elemental_reactions/superconduct.vpcf", PATTACH_OVERHEAD_FOLLOW, args.target)
+    ParticleManager:ReleaseParticleIndex(particleID)
+    local explosionParticleId = ParticleManager:CreateParticle("particles/units/heroes/hero_crystalmaiden/maiden_crystal_nova.vpcf", 
+    PATTACH_WORLDORIGIN, args.target)
+    ParticleManager:SetParticleControl(explosionParticleId, 0, args.target:GetOrigin())
+    ParticleManager:SetParticleControl(explosionParticleId, 1, Vector(self.SUPERCONDUCT_RADIUS, 1, 1))
+    ParticleManager:ReleaseParticleIndex(explosionParticleId)
+    assert(args.target:FindModifierByName("modifier_superconduct") ~= nil, "superconduct target doesn't have a superconduct modifier after the reaction")
+    assert(not self:UnitHasElementalModifier(args.target, self.ELECTRO), "superconduct target still has an electro effect after the reaction")
+    assert(not self:UnitHasElementalModifier(args.target, self.CRYO), "superconduct target still has a cryo effect after the reaction")
 end
 
 -- Returns if the given unit has the modifier of the given element
@@ -276,3 +319,16 @@ function GenshinElements:_UnfreezeThinker()
     :where(function(x) return not self:UnitHasElementalModifier(x, self.CRYO) end)
     :foreach(function(x) x:RemoveModifierByName("modifier_frozen") end)
 end
+
+function GenshinElements:_GetCasterLevel(caster)
+    AssertTypeOneOf(caster, "caster", { "table", "nil" })
+    if (caster ~= nil) then
+        return caster:GetLevel()
+    else
+        return self.NIL_CASTER_LEVEL
+    end
+end
+
+function GenshinElements:_GetOverloadedDamage(casterLevel) return 0.3 * casterLevel * casterLevel + 34 end
+
+function GenshinElements:_GetSuperconductDamage(casterLevel) return 0.2 * casterLevel * casterLevel + 20 end
