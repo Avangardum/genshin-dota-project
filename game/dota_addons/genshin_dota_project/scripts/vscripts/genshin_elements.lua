@@ -62,6 +62,7 @@ GenshinElements.OVERLOADED_RADIUS = 500
 GenshinElements.SUPERCONDUCT_ARMOR_REDUCTION = 10
 GenshinElements.SUPERCONDUCT_RADIUS = 500
 GenshinElements.SUPERCONDUCT_DURATION = 12
+GenshinElements.SWIRL_RADIUS = 500
 
 -- Accepts a damage table with all arguments required for ApplyDamage, plus it shoud contain an element
 function GenshinElements:ApplyElementalDamage(damageTable)
@@ -109,7 +110,10 @@ function GenshinElements:ApplyElement(args)
     if self:UnitHasElementalModifiers(args.target, {self.CRYO, self.ELECTRO}) then
         self:_TriggerSuperconduct(args)
     end
-
+    if self:UnitHasElementalModifier(args.target, self.ANEMO) and 
+        self:UnitHasAtLeastOneOfElementalModifiers(args.target, {self.PYRO, self.CRYO, self.HYDRO, self.ELECTRO}) then
+        self:_TriggerSwirl(args)
+    end
     return damageMuliplier
 end
 
@@ -211,6 +215,7 @@ end
 function GenshinElements:_TriggerSuperconduct(args)
     assert(self:UnitHasElementalModifier(args.target, self.ELECTRO), "superconduct target doesn't have an electro modifier before the reaction")
     assert(self:UnitHasElementalModifier(args.target, self.CRYO), "superconduct target doesn't have a cryo modifier before the reaction")
+    assert(IsServer(), "elemental reaction was triggered on client")
     self:RemoveElementalModifiersFromUnit(args.target, { self.ELECTRO, self.CRYO })
     local affectedUnits = from(
         FindUnitsInRadius(
@@ -250,6 +255,57 @@ function GenshinElements:_TriggerSuperconduct(args)
     assert(not self:UnitHasElementalModifier(args.target, self.CRYO), "superconduct target still has a cryo effect after the reaction")
 end
 
+function GenshinElements:_TriggerSwirl(args)
+    assert(self:UnitHasElementalModifier(args.target, self.ANEMO), "swirl target doesn't have a swirl modifier before the reaction")
+    assert(self:UnitHasAtLeastOneOfElementalModifiers(args.target, { self.PYRO, self.HYDRO, self.CRYO, self.ELECTRO }, 
+        "swirl target doesn't have a swirlable elemental modifier before the reaction"))
+    assert(IsServer(), "elemental reaction was triggered on client")
+    self:RemoveElementalModifierFromUnit(args.target, self.ANEMO)
+    local swirledElement;
+    if self:UnitHasElementalModifier(args.target, self.PYRO) then swirledElement = self.PYRO
+    elseif self:UnitHasElementalModifier(args.target, self.HYDRO) then swirledElement = self.HYDRO
+    elseif self:UnitHasElementalModifier(args.target, self.CRYO) then swirledElement = self.CRYO
+    elseif self:UnitHasElementalModifier(args.target, self.ELECTRO) then swirledElement = self.ELECTRO
+    else error("something went wrong") end
+    local affectedUnits = from(
+        FindUnitsInRadius(
+        args.target:GetTeamNumber(),                        -- team
+        args.target:GetOrigin(),                            -- location
+        nil,                                                -- cacheUnit
+        self.SWIRL_RADIUS,                                  -- radius
+        DOTA_UNIT_TARGET_TEAM_BOTH,                         -- teamFilter
+        DOTA_UNIT_TARGET_HERO + DOTA_UNIT_TARGET_BASIC,     -- targetType
+        DOTA_UNIT_TARGET_FLAG_NONE,                         -- flagFilter
+        FIND_ANY_ORDER,                                     -- order
+        false                                               -- canGrowCache
+        )
+    )
+    :where(function(x) return args.caster == nil or x:GetTeamNumber() ~= args.caster:GetTeamNumber() end) -- exclude caster's allies
+    :toArray()
+    local damage
+    if (swirledElement == self.HYDRO) then damage = 0
+    else damage = self:_GetSwirlDamage(self:_GetCasterLevel(args.caster)) end
+    for _, unit in pairs(affectedUnits) do
+        self:ApplyElementalDamage
+        {
+            victim = unit,
+            attacker = args.caster,
+            damage = damage,
+            damage_type = DAMAGE_TYPE_MAGICAL,
+            element = swirledElement
+        }
+    end
+    local particleID = ParticleManager:CreateParticle("particles/genshin_elemental_reactions/swirl.vpcf", PATTACH_OVERHEAD_FOLLOW, args.target)
+    ParticleManager:ReleaseParticleIndex(particleID)
+    local burstParticleId = ParticleManager:CreateParticle("particles/genshin_elemental_reactions/swirl_burst.vpcf", 
+    PATTACH_WORLDORIGIN, args.target)
+    local burstParticleOffset = Vector(0, 0, 50)
+    ParticleManager:SetParticleControl(burstParticleId, 0, args.target:GetOrigin() + burstParticleOffset)
+    ParticleManager:SetParticleControl(burstParticleId, 1, Vector(self.SWIRL_RADIUS, 1, 1))
+    ParticleManager:ReleaseParticleIndex(burstParticleId)
+    assert(not self:UnitHasElementalModifier(args.target, self.ANEMO), "swirl target has a swirl modifier after the reaction")
+end
+
 -- Returns if the given unit has the modifier of the given element
 function GenshinElements:UnitHasElementalModifier(unit, element)
     AssertType(unit, "unit", "table")
@@ -268,6 +324,18 @@ function GenshinElements:UnitHasElementalModifiers(unit, elements)
     end
 
     return true
+end
+
+function GenshinElements:UnitHasAtLeastOneOfElementalModifiers(unit, elements)
+    AssertType(unit, "unit", "table")
+    for _, element in pairs(elements) do assert(self:IsValidElement(element), element.." is not a valid element") end
+    for _, element in pairs(elements) do
+        if self:UnitHasElementalModifier(unit, element) then
+            return true
+        end
+    end
+
+    return false
 end
 
 -- Removes the modifier of the given element from the given unit
@@ -332,3 +400,5 @@ end
 function GenshinElements:_GetOverloadedDamage(casterLevel) return 0.3 * casterLevel * casterLevel + 34 end
 
 function GenshinElements:_GetSuperconductDamage(casterLevel) return 0.2 * casterLevel * casterLevel + 20 end
+
+function GenshinElements:_GetSwirlDamage(casterLevel) return 0.2 * casterLevel * casterLevel + 20 end

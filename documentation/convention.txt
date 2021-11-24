@@ -1,14 +1,15 @@
 Naming:
 Module and library objects              : SampleText
-Game Entities (heroes, abilities, etc.) : sample_text
-Public Functions                        : SampleText
-Private Functions                       : _SampleText
+Game entities (heroes, abilities, etc.) : sample_text
+Public functions                        : SampleText
+Private functions                       : _SampleText
 Public variables                        : sampleText
 Private variables                       : _sampleText
 Public constants                        : SAMPLE_TEXT
 Private constants                       : _SAMPLE_TEXT
 Arguments                               : sampleText
 Files                                   : sample_text
+Error messages                          : sample text
 
 Private members should never be used outside of their object
 All dependencies between modules should be listed in architecture.txt

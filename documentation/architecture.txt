@@ -3,13 +3,14 @@ Genshin elements
 Heroes (each hero is a separate module)
 
 Genshin elements module
-Contains all logic of elements and provides functions to apply elements and elemental
-damage to units. 
+Contains all logic of elements and provides functions to apply elements and elemental damage to units
+Includes elemental modifiers and reaction modifiers
 Dependencies:
 None
 
 Heroes modules
-Each hero is a separate module. Heroes shouldn't depend on each other
+Each hero is a separate module, including all of its abilities and modifiers
+Heroes modules shouldn't depend on each other
 Dependencies:
 Genshin elements module
 
