@@ -9,6 +9,9 @@ LinkLuaModifier("modifier_geo_effect", "modifiers/modifier_geo_effect.lua", LUA_
 LinkLuaModifier("modifier_frozen", "modifiers/modifier_frozen", LUA_MODIFIER_MOTION_NONE)
 LinkLuaModifier("modifier_frozen_immunity", "modifiers/modifier_frozen_immunity", LUA_MODIFIER_MOTION_NONE)
 LinkLuaModifier("modifier_superconduct", "modifiers/modifier_superconduct", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("modifier_superconduct_immunity", "modifiers/modifier_superconduct_immunity", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("modifier_overloaded_immunity", "modifiers/modifier_overloaded_immunity", LUA_MODIFIER_MOTION_NONE)
+LinkLuaModifier("modifier_swirl_immunity", "modifiers/modifier_swirl_immunity", LUA_MODIFIER_MOTION_NONE)
 
 GenshinElements = {}
 
@@ -59,6 +62,10 @@ GenshinElements.MELT_CRYO_DAMAGE_MULTIPLIER = 1.5
 GenshinElements.FROZEN_IMMUNITY_MULTIPLIER = 2 -- frozen immunity duration = frozen duration * GenshinElements.FROZEN_IMMUNITY_MULTIPLIER
 
 GenshinElements.OVERLOADED_RADIUS = 500
+GenshinElements.OVERLOADED_IMMUNITY_DURATION = 0.25
+GenshinElements.SUPERCONDUCT_IMMUNITY_DURATION = 0.25
+GenshinElements.SWIRL_IMMUNITY_DURATION = 0.25
+GenshinElements.OVERLOADED_IMMUNITY_DURATION = 0.25
 GenshinElements.SUPERCONDUCT_ARMOR_REDUCTION = 10
 GenshinElements.SUPERCONDUCT_RADIUS = 500
 GenshinElements.SUPERCONDUCT_DURATION = 12
@@ -191,6 +198,7 @@ function GenshinElements:_TriggerOverloaded(args)
         )
     )
     :where(function(x) return args.caster == nil or x:GetTeamNumber() ~= args.caster:GetTeamNumber() end) -- exclude caster's allies
+    :where(function(x) return x:FindModifierByName("modifier_overloaded_immunity") == nil end)  -- exclude units with overloaded immunity
     :toArray()
     for _, unit in pairs(affectedUnits) do
         ApplyDamage
@@ -200,6 +208,7 @@ function GenshinElements:_TriggerOverloaded(args)
             damage      = self:_GetOverloadedDamage(self:_GetCasterLevel(args.caster)),
             damage_type = DAMAGE_TYPE_MAGICAL,
         }
+        unit:AddNewModifier(args.caster, nil, "modifier_overloaded_immunity", { duration = self.OVERLOADED_IMMUNITY_DURATION })
     end
     local particleID = ParticleManager:CreateParticle("particles/genshin_elemental_reactions/overloaded.vpcf", PATTACH_OVERHEAD_FOLLOW, args.target)
     ParticleManager:ReleaseParticleIndex(particleID)
@@ -231,6 +240,7 @@ function GenshinElements:_TriggerSuperconduct(args)
         )
     )
     :where(function(x) return args.caster == nil or x:GetTeamNumber() ~= args.caster:GetTeamNumber() end) -- exclude caster's allies
+    :where(function(x) return x:FindModifierByName("modifier_superconduct_immunity") == nil end) -- exclude units with superconduct immunity
     :toArray()
     for _, unit in pairs(affectedUnits) do
         ApplyDamage
@@ -242,6 +252,7 @@ function GenshinElements:_TriggerSuperconduct(args)
         }
         local superconductModifier = unit:AddNewModifier(args.caster, nil, "modifier_superconduct", 
             { duration = self.SUPERCONDUCT_DURATION, armorReduction = self.SUPERCONDUCT_ARMOR_REDUCTION })
+        unit:AddNewModifier(args.caster, nil, "modifier_superconduct_immunity", { duration = self.SUPERCONDUCT_IMMUNITY_DURATION })
     end
     local particleID = ParticleManager:CreateParticle("particles/genshin_elemental_reactions/superconduct.vpcf", PATTACH_OVERHEAD_FOLLOW, args.target)
     ParticleManager:ReleaseParticleIndex(particleID)
@@ -281,6 +292,7 @@ function GenshinElements:_TriggerSwirl(args)
         )
     )
     :where(function(x) return args.caster == nil or x:GetTeamNumber() ~= args.caster:GetTeamNumber() end) -- exclude caster's allies
+    :where(function(x) return x:FindModifierByName("modifier_swirl_immunity") == nil end)  -- exclude units with swirl immunity
     :toArray()
     local damage
     if (swirledElement == self.HYDRO) then damage = 0
@@ -294,6 +306,7 @@ function GenshinElements:_TriggerSwirl(args)
             damage_type = DAMAGE_TYPE_MAGICAL,
             element = swirledElement
         }
+        unit:AddNewModifier(args.caster, nil, "modifier_swirl_immunity", { duration = self.SWIRL_IMMUNITY_DURATION })
     end
     local particleID = ParticleManager:CreateParticle("particles/genshin_elemental_reactions/swirl.vpcf", PATTACH_OVERHEAD_FOLLOW, args.target)
     ParticleManager:ReleaseParticleIndex(particleID)
