@@ -1,0 +1,1 @@
+ayaka_hyouka = class({})

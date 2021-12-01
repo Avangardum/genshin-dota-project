@@ -13,6 +13,7 @@
 #base "abilities/yanfei_signed_edict.txt"
 #base "abilities/yanfei_seal_of_approval.txt"
 #base "abilities/yanfei_done_deal.txt"
+#base "abilities/ayaka_hyouka.txt"
 
 "DOTAAbilities"
 {

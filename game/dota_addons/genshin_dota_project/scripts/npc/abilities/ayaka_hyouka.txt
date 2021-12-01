@@ -1,0 +1,30 @@
+"DOTAAbilities"
+{
+    "ayaka_hyouka"
+    {
+        "BaseClass"					    "ability_lua"
+        "ScriptFile"					"abilities/ayaka_hyouka.lua"
+        
+        "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_NO_TARGET | DOTA_ABILITY_BEHAVIOR_AOE"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"	
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+        "AbilityCastPoint"				"0.45 0.45 0.45 0.45"
+        "AbilityCooldown"				"9 8 7 6"
+        "AbilityManaCost"				"100 110 120 130"
+		"AbilityTextureName"			"crystal_maiden_crystal_nova"
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "radius"                           "300"
+            }
+            "02"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "damage"                           "100 150 200 250"
+            }
+        }
+    }
+}

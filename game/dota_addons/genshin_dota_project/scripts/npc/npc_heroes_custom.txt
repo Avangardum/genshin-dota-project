@@ -4,6 +4,7 @@
 // https://moddota.com/tools/combining-kv-files-using-base
 //#base "heroes/chaos_knight.txt"
 #base "heroes/yanfei.txt"
+#base "heroes/ayaka.txt"
 
 "DOTAHeroes"
 {
