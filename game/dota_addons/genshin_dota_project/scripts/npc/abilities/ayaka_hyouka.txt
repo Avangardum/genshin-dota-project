@@ -25,6 +25,16 @@
                 "var_type"                         "FIELD_INTEGER"
                 "damage"                           "100 150 200 250"
             }
+            "03"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "height"                           "200"
+            }
+            "04"
+            {
+                "var_type"                         "FIELD_FLOAT"
+                "duration"                         "1"
+            }
         }
     }
 }
