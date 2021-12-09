@@ -1,0 +1,56 @@
+"DOTAAbilities"
+{
+    "ayaka_soumetsu"
+    {
+        "BaseClass"					    "ability_lua"
+        "ScriptFile"					"abilities/ayaka_soumetsu.lua"
+        
+        "AbilityType"                   "DOTA_ABILITY_TYPE_ULTIMATE"
+        "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_DIRECTIONAL | DOTA_ABILITY_BEHAVIOR_POINT"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"	
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+        "AbilityCastPoint"				"0.45 0.45 0.45"
+        "AbilityCooldown"				"120 110 100"
+        "AbilityManaCost"				"200 300 400"
+		"AbilityTextureName"			"ancient_apparition_ice_blast"
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "intermediate_burst_radius"        "200"
+            }
+            "02"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "final_burst_radius"               "600"
+            }
+            "03"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "intermediate_burst_damage"        "30 40 50"
+            }
+            "04"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "final_burst_damage"               "200 300 400"
+            }
+            "05"
+            {
+                "var_type"                         "FIELD_FLOAT"
+                "interval"                         "0.3"
+            }
+            "06"
+            {
+                "var_type"                         "FIELD_FLOAT"
+                "duration"                         "3"
+            }
+            "07"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "speed"                            "300"
+            }
+        }
+    }
+}

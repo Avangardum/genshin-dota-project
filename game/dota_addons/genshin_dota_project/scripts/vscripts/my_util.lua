@@ -40,8 +40,10 @@ function AssertWithErrorLevel(condition, message, level)
     end
 end
 
-function AssertNumberInRange(number, numberName, min, max, message)
-    AssertType("number", numberName, "number")
+function AssertNumberInRange(number, numberName, min, max)
+    AssertType(number, numberName, "number")
+    AssertType(min, "min", "number")
+    AssertType(max, "max", "number")
     local isNumberInRange = min <= number and number <= max
     AssertWithErrorLevel(isNumberInRange, numberName.." is out of range. Expected "..min.." - "..max..", received "..number, 2)
 end
@@ -50,5 +52,13 @@ function AssertSingleTypeArray(array, arrayName, requiredType)
     AssertType(array, arrayName, "table")
     for k, v in pairs(array) do
         AssertWithErrorLevel(type(v) == requiredType, arrayName.." is not an array of "..requiredType, 2)
+    end
+end
+
+function Ternary(condition, trueResult, falseResult)
+    if condition then
+        return trueResult
+    else
+        return falseResult
     end
 end
