@@ -1,0 +1,40 @@
+"DOTAAbilities"
+{
+    "ayaka_kabuki"
+    {
+        "BaseClass"					    "ability_lua"
+        "ScriptFile"					"abilities/ayaka_kabuki.lua"
+
+        "AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_DIRECTIONAL | DOTA_ABILITY_BEHAVIOR_POINT"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_PHYSICAL"	
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_YES"
+        "AbilityCastPoint"				"0.25"
+        "AbilityCooldown"				"9 8 7 6"
+        "AbilityManaCost"				"100 110 120 130"
+		"AbilityTextureName"			"sven_great_cleave"
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"                      "FIELD_FLOAT"
+                "cleave_damage_multiplier"      "1 1.8 2.6 3.4"
+            }
+            "02"
+            {
+                "var_type"                      "FIELD_INTEGER"
+                "cleave_start_radius"           "40"
+            }
+            "03"
+            {
+                "var_type"                      "FIELD_INTEGER"
+                "cleave_end_radius"             "400"
+            }
+            "03"
+            {
+                "var_type"                      "FIELD_INTEGER"
+                "cleave_distance"               "500"
+            }
+        }
+    }
+}

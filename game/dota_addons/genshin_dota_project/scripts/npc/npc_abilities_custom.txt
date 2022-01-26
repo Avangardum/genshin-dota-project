@@ -15,6 +15,7 @@
 #base "abilities/yanfei_done_deal.txt"
 #base "abilities/ayaka_hyouka.txt"
 #base "abilities/ayaka_soumetsu.txt"
+#base "abilities/ayaka_kabuki.txt"
 
 "DOTAAbilities"
 {

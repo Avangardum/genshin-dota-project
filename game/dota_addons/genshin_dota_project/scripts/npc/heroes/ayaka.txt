@@ -2,11 +2,11 @@
 {
 	"npc_dota_hero_ayaka"
     {
-        "override_hero"                "npc_dota_hero_crystal_maiden"
+        "override_hero"                "npc_dota_hero_juggernaut"
 
         // Abilities
         "Ability1"		               "ayaka_hyouka"
-        "Ability2"		               ""
+        "Ability2"		               "ayaka_kabuki"
         "Ability3"		               ""
         "Ability4"		               "ayaka_soumetsu"
         "Ability5"		               ""
