@@ -32,7 +32,7 @@
 
         // Hp and mana
         "StatusHealth"                 "200"
-        "StatusHealthRegen"            "0.25"
+        "StatusHealthRegen"            "0.5"
         "StatusMana"                   "75"
         "StatusManaRegen"              "0"
 
@@ -42,25 +42,24 @@
 
         // Attack
         "AttackCapabilities"           "DOTA_UNIT_CAP_MELEE_ATTACK"
-        "AttackDamageMin"              "9"
-        "AttackDamageMax"              "15"
-        "AttackRate"                   "1.6"
+        "AttackDamageMin"              "16"
+        "AttackDamageMax"              "20"
+        "AttackRate"                   "1.4"
         "BaseAttackSpeed"	           "100"
-        "AttackAnimationPoint"         "0.65"
+        "AttackAnimationPoint"         "0.33"
         "AttackRange"                  "150"
-        "ProjectileSpeed"              "900"
 
         // Attributes
         "AttributePrimary"             "DOTA_ATTRIBUTE_AGILITY"
         "AttributeBaseStrength"        "20"
-        "AttributeStrengthGain"        "2.4"
-        "AttributeBaseAgility"         "23"
-        "AttributeAgilityGain"         "2.1"
-        "AttributeBaseIntelligence"    "30"
-        "AttributeIntelligenceGain"    "3.7"
+        "AttributeStrengthGain"        "2.2"
+        "AttributeBaseAgility"         "30"
+        "AttributeAgilityGain"         "2.5"
+        "AttributeBaseIntelligence"    "25"
+        "AttributeIntelligenceGain"    "2.4"
 
         // Movement
-        "MovementSpeed"                "290"
+        "MovementSpeed"                "305"
         "MovementTurnRate"             "0.6"
 
         // Vision
