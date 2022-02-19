@@ -1,0 +1,55 @@
+"DOTAAbilities"
+{
+    "ayaka_senho"
+    {
+        "BaseClass"					    "ability_lua"
+        "ScriptFile"					"abilities/ayaka_senho.lua"
+        
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_ROOT_DISABLES"
+		"AbilityUnitDamageType"			"DAMAGE_TYPE_MAGICAL"	
+		"SpellImmunityType"				"SPELL_IMMUNITY_ENEMIES_NO"
+        "AbilityCastPoint"				"0.3"
+        "AbilityCooldown"				"30 22 14 5"
+        "AbilityManaCost"				"100 135 170 200"
+		"AbilityTextureName"			"storm_spirit_ball_lightning"
+
+        "AbilitySpecial"
+        {
+            "01"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "max_distance"                     "800 950 1100 1250"
+            }
+            "02"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "speed"                            "400 470 540 600"
+            }
+            "03"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "damage"                           "100 150 200 250"
+            }
+            "04"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "movement_speed_reduction"         "20 30 40 50"  
+            }
+            "05"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "attack_speed_reduction"           "20 30 40 50"
+            }
+            "06"
+            {
+                "var_type"                         "FIELD_FLOAT"
+                "slow_duration"                    "2"
+            }
+            "07"
+            {
+                "var_type"                         "FIELD_INTEGER"
+                "radius"                           "300"
+            }
+        }
+    }
+}

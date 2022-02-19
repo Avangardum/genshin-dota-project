@@ -7,7 +7,7 @@
         // Abilities
         "Ability1"		               "ayaka_hyouka"
         "Ability2"		               "ayaka_kabuki"
-        "Ability3"		               ""
+        "Ability3"		               "ayaka_senho"
         "Ability4"		               "ayaka_soumetsu"
         "Ability5"		               ""
         "Ability6"		               ""
