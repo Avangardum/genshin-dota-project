@@ -1,34 +1,79 @@
 "lang"
 {
-	"Language"		"Russian"
-	"Tokens"
-	{		
-		"DOTA_GoodGuys"   								                        "Свет"
-		"DOTA_BadGuys"    								                        "Тьма"
-		
-		//--------------------
-		// Abilities
-		//--------------------
-		// Yanfei
-		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_Description"				"Наносит пиро урон врагам в области. Багровые печати увеличивают урон и радиус и уменьшают расход маны и перезарядку."
-		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_base_aoe"					"БАЗОВЫЙ РАДИУС:"
-		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_aoe_per_seal"				"РАДИУС ЗА ПЕЧАТЬ:"
-		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_base_damage"				"БАЗОВЫЙ УРОН:"
-		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_damage_per_seal"			"УРОН ЗА ПЕЧАТЬ:"
-		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_cd_reduction_per_seal"	"СНИЖЕНИЕ ПЕРЕЗАРЯДКИ ЗА ПЕЧАТЬ:"
-		"DOTA_Tooltip_Ability_yanfei_seal_of_approval_mana_cost_reduction_per_seal"		"СНИЖЕНИЕ РАСХОДА МАНЫ ЗА ПЕЧАТЬ:"
-		"DOTA_Tooltip_Ability_yanfei_signed_edict_Description"					"Наносит пиро урон врагам в области. Даёт максимальное количество багровых печатей, если задевает врага."
-		"DOTA_Tooltip_Ability_yanfei_signed_edict_aoe"							"РАДИУС:"
-		"DOTA_Tooltip_Ability_yanfei_signed_edict_damage"						"УРОН:"
-		"DOTA_Tooltip_Ability_yanfei_scarlet_seals_Description"					"Даёт 1 багровую печать, когда вы попадаете атакой по врагу. Каждая печать увеличивает урон."
-		"DOTA_Tooltip_Ability_yanfei_scarlet_seals_damage_per_stack"			"УРОН ЗА ПЕЧАТЬ:"
-		"DOTA_Tooltip_Ability_yanfei_scarlet_seals_max_stacks"					"МАКСИМУМ ПЕЧАТЕЙ:"
-		"DOTA_Tooltip_modifier_yanfei_scarlet_seals_Description"				"УРОН УВЕЛИЧЕН НА %dMODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE%"
-		"DOTA_Tooltip_Ability_yanfei_done_deal_Description"						"Наносит пиро урон вокруг Янь Фей, даёт ей максимальное количество багровых печатей и эффект Блеска. Блеск увеличивает урон от Seal of Approval и периодически даёт ей багровые печати."
-		"DOTA_Tooltip_Ability_yanfei_done_deal_aoe"								"РАДИУС:"
-		"DOTA_Tooltip_Ability_yanfei_done_deal_damage"							"УРОН:"
-		"DOTA_Tooltip_Ability_yanfei_done_deal_duration"						"ДЛИТЕЛЬНОСТЬ БЛЕСКА:"
-		"DOTA_Tooltip_Ability_yanfei_done_deal_seal_grant_interval"				"ИНТЕРВАЛ ПОЛУЧЕНИЯ БАГРОВЫХ ПЕЧАТЕЙ:"
-		"DOTA_Tooltip_Ability_yanfei_done_deal_seal_of_approval_damage_multiplier"		"МНОЖИТЕЛЬ УРОНА ОТ SEAL OF APPROVAL:"
-	}
+    "Language"        "Russian"
+    "Tokens"
+    {        
+        "DOTA_GoodGuys"                                                                  "Свет"
+        "DOTA_BadGuys"                                                                   "Тьма"
+        
+        //--------------------
+        // Abilities and modifiers
+        //--------------------
+
+        // Elements
+        "DOTA_Tooltip_modifier_pyro_effect"                                              "Пиро"
+        "DOTA_Tooltip_modifier_hydro_effect"                                             "Гидро"
+        "DOTA_Tooltip_modifier_cryo_effect"                                              "Крио"
+        "DOTA_Tooltip_modifier_electro_effect"                                           "Электро"
+        "DOTA_Tooltip_modifier_anemo_effect"                                             "Анемо"
+        "DOTA_Tooltip_modifier_geo_effect"                                               "Гео"
+        "DOTA_Tooltip_modifier_frozen"                                                   "Заморожен"
+        "DOTA_Tooltip_modifier_frozen_immunity"                                          "Иммунитет к заморозке"
+        "DOTA_Tooltip_modifier_superconduct"                                             "Сверхпроводник"
+
+
+        // Generic
+        "DOTA_Tooltip_modifier_generic_arc_lua"                                          "Движется по дуге"
+        "DOTA_Tooltip_modifier_generic_stunned_lua"                                      "Оглушён"
+        "DOTA_Tooltip_modifier_generic_slowed_lua"                                       "Замедлен"
+
+        // Yanfei
+        "DOTA_Tooltip_Ability_yanfei_seal_of_approval_Description"                       "Наносит пиро урон врагам в области. Багровые печати увеличивают урон и радиус и уменьшают расход маны и перезарядку."
+        "DOTA_Tooltip_Ability_yanfei_seal_of_approval_base_aoe"                          "БАЗОВЫЙ РАДИУС:"
+        "DOTA_Tooltip_Ability_yanfei_seal_of_approval_aoe_per_seal"                      "РАДИУС ЗА ПЕЧАТЬ:"
+        "DOTA_Tooltip_Ability_yanfei_seal_of_approval_base_damage"                       "БАЗОВЫЙ УРОН:"
+        "DOTA_Tooltip_Ability_yanfei_seal_of_approval_damage_per_seal"                   "УРОН ЗА ПЕЧАТЬ:"
+        "DOTA_Tooltip_Ability_yanfei_seal_of_approval_cd_reduction_per_seal"             "СНИЖЕНИЕ ПЕРЕЗАРЯДКИ ЗА ПЕЧАТЬ:"
+        "DOTA_Tooltip_Ability_yanfei_seal_of_approval_mana_cost_reduction_per_seal"      "СНИЖЕНИЕ РАСХОДА МАНЫ ЗА ПЕЧАТЬ:"
+        "DOTA_Tooltip_Ability_yanfei_signed_edict_Description"                           "Наносит пиро урон врагам в области. Даёт максимальное количество багровых печатей, если задевает врага."
+        "DOTA_Tooltip_Ability_yanfei_signed_edict_aoe"                                   "РАДИУС:"
+        "DOTA_Tooltip_Ability_yanfei_signed_edict_damage"                                "УРОН:"
+        "DOTA_Tooltip_Ability_yanfei_scarlet_seals_Description"                          "Даёт 1 багровую печать, когда вы попадаете атакой по врагу. Каждая печать увеличивает урон."
+        "DOTA_Tooltip_Ability_yanfei_scarlet_seals_damage_per_stack"                     "УРОН ЗА ПЕЧАТЬ:"
+        "DOTA_Tooltip_Ability_yanfei_scarlet_seals_max_stacks"                           "МАКСИМУМ ПЕЧАТЕЙ:"
+        "DOTA_Tooltip_modifier_yanfei_scarlet_seals_Description"                         "Урон увеличен на %dMODIFIER_PROPERTY_PREATTACK_BONUS_DAMAGE%"
+        "DOTA_Tooltip_Ability_yanfei_done_deal_Description"                              "Наносит пиро урон вокруг Янь Фей, даёт ей максимальное количество багровых печатей и эффект Блеска. Блеск увеличивает урон от Seal of Approval и периодически даёт ей багровые печати."
+        "DOTA_Tooltip_Ability_yanfei_done_deal_aoe"                                      "РАДИУС:"
+        "DOTA_Tooltip_Ability_yanfei_done_deal_damage"                                   "УРОН:"
+        "DOTA_Tooltip_Ability_yanfei_done_deal_duration"                                 "ДЛИТЕЛЬНОСТЬ БЛЕСКА:"
+        "DOTA_Tooltip_Ability_yanfei_done_deal_seal_grant_interval"                      "ИНТЕРВАЛ ПОЛУЧЕНИЯ БАГРОВЫХ ПЕЧАТЕЙ:"
+        "DOTA_Tooltip_Ability_yanfei_done_deal_seal_of_approval_damage_multiplier"        "МНОЖИТЕЛЬ УРОНА ОТ SEAL OF APPROVAL:"
+        
+        // Ayaka
+        "DOTA_Tooltip_Ability_ayaka_hyouka_Description"                                  "Наносит крио урон врагам вокруг и подкидывает их в воздух."
+        "DOTA_Tooltip_Ability_ayaka_hyouka_radius"                                       "РАДИУС:"
+        "DOTA_Tooltip_Ability_ayaka_hyouka_damage"                                       "УРОН:"
+        "DOTA_Tooltip_Ability_ayaka_hyouka_duration"                                     "ДЛИТЕЛЬНОСТЬ ПОДКИДЫВАНИЯ:"
+        "DOTA_Tooltip_Ability_ayaka_kabuki_Description"                                  "Совершает атаку по области в указанном направлении."
+        "DOTA_Tooltip_Ability_ayaka_kabuki_cleave_damage_multiplier"                     "МНОЖИТЕЛЬ УРОНА:"
+        "DOTA_Tooltip_Ability_ayaka_kabuki_cleave_start_radius"                          "НАЧАЛЬНЫЙ РАДИУС:"
+        "DOTA_Tooltip_Ability_ayaka_kabuki_cleave_end_radius"                            "КОНЕЧНЫЙ РАДИУС:"
+        "DOTA_Tooltip_Ability_ayaka_kabuki_cleave_distance"                              "ДАЛЬНОСТЬ:"
+        "DOTA_Tooltip_Ability_ayaka_senho_Description"                                   "Аяка скрывается в стремительном потоке морозного тумана, который движется вместе с ней. После окончания формы Сэнхо и при повторном появлении наносит крио урон врагам вокруг и замедляет их."
+        "DOTA_Tooltip_Ability_ayaka_senho_max_distance"                                  "МАКСИМАЛЬНАЯ ДАЛЬНОСТЬ:"
+        "DOTA_Tooltip_Ability_ayaka_senho_speed"                                         "СКОРОСТЬ:"
+        "DOTA_Tooltip_Ability_ayaka_senho_damage"                                        "УРОН:"
+        "DOTA_Tooltip_Ability_ayaka_senho_movement_speed_reduction"                      "ЗАМЕДЛЕНИЕ ПЕРЕДВИЖЕНИЯ:"
+        "DOTA_Tooltip_Ability_ayaka_senho_attack_speed_reduction"                        "ЗАМЕДЛЕНИЕ АТАКИ:"
+        "DOTA_Tooltip_Ability_ayaka_senho_slow_duration"                                 "ДЛИТЕЛЬНОСТЬ ЗАМЕДЛЕНИЯ:"
+        "DOTA_Tooltip_Ability_ayaka_senho_radius"                                        "РАДИУС:"
+        "DOTA_Tooltip_Ability_ayaka_soumetsu_Description"                                "Запускает непрерывно движущийся вперёд Морозный сэки но то в указанном направлении. Он наносит крио урон во время движения, а в конце взрывается, нанося ещё больший крио урон."
+        "DOTA_Tooltip_Ability_ayaka_soumetsu_intermediate_burst_radius"                  "РАДИУС УРОНА В ДВИЖЕНИИ:"
+        "DOTA_Tooltip_Ability_ayaka_soumetsu_intermediate_burst_damage"                  "УРОН В ДВИЖЕНИИ:"
+        "DOTA_Tooltip_Ability_ayaka_soumetsu_interval"                                   "ИНТЕРВАЛ УРОНА В ДВИЖЕНИИ:"
+        "DOTA_Tooltip_Ability_ayaka_soumetsu_final_burst_radius"                         "РАДИУС ВЗРЫВА:"
+        "DOTA_Tooltip_Ability_ayaka_soumetsu_final_burst_damage"                         "УРОН ВЗРЫВА:"
+        "DOTA_Tooltip_Ability_ayaka_soumetsu_duration"                                   "ДЛИТЕЛЬНОСТЬ ДВИЖЕНИЯ:"
+        "DOTA_Tooltip_Ability_ayaka_soumetsu_speed"                                      "СКОРОСТЬ ДВИЖЕНИЯ:"
+    }
 }
